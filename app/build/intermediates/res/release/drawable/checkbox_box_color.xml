@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<item>
+    <shape android:shape="rectangle" >
+        <solid android:color="#ffffff"/>
+        <stroke android:width="3dp"
+            android:color="#ffab4e88"/>
+        <corners android:radius="10dp"/>
+    </shape>
+</item>
+</layer-list><!-- From: file:/home/altus/gitArchives/django/jmbo-games/Android/android/app/src/main/res/drawable/checkbox_box_color.xml -->

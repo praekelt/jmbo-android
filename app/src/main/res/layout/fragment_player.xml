@@ -1,0 +1,70 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="50dp"
+    android:background="#f8f8f8"
+    android:id="@+id/player_area">
+
+    <ToggleButton
+        android:onClick="playPause"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginLeft="20dp"
+        android:id="@+id/playPause"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+
+        style="@style/toggleButton"
+        android:background="@drawable/play_pause_toggle_background"
+        />
+<!--
+    <Button
+        android:onClick="filterMenu"
+        android:layout_width="50dp"
+        android:layout_height="fill_parent"
+        android:id="@+id/filter_button"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/more_inactive"
+        android:layout_marginRight="15dp"/>-->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit ="marquee_forever"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+
+        android:textSize="20sp"
+        android:id="@+id/songTitle"
+        android:layout_toRightOf="@+id/playPause"/>
+        <!--android:layout_toLeftOf="@+id/filter_button"-->
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit ="marquee_forever"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+
+        android:id="@+id/artistName"
+        android:layout_below="@+id/songTitle"
+        android:layout_toRightOf="@+id/playPause"/>
+
+    <!--android:layout_toLeftOf="@+id/filter_button"-->
+
+</RelativeLayout>
+
+

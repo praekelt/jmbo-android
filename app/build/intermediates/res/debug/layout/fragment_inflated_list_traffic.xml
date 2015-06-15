@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    >
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentLeft="true"
+
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+
+        android:id="@+id/traffic_pic"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="10dp"
+
+        android:text="@string/title_default_text"
+        android:textSize="19sp"
+        android:textColor="#ff000000"
+
+        android:id="@+id/traffic_type"
+        android:layout_below="@+id/traffic_pic"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="10dp"
+
+        android:text="24h"
+        android:textSize="12sp"
+        android:textColor="#8d8d8d"
+
+        android:id="@+id/time_ago"
+        android:layout_below="@+id/traffic_type"
+        android:gravity="center" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="10dp"
+
+        android:text="Default Traffic Situation"
+        android:textSize="15sp"
+        android:textColor="#8d8d8d"
+
+        android:id="@+id/description"
+        android:layout_below= "@+id/time_ago"
+
+        android:layout_marginRight="10dp"/>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>
+<!-- From: file:/home/altus/gitArchives/django/jmbo-games/Android/android/app/src/main/res/layout/fragment_inflated_list_traffic.xml -->

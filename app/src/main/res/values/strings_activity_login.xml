@@ -1,0 +1,29 @@
+<resources>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="login">Login</string>
+    <string name="start">Start Listening</string>
+    <string name="update">Update Profile</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="create_profile">Create a Profile</string>
+    <string name="skip_login">Do not Login</string>
+
+    <string name="username">Username</string>
+    <string name="name">Name</string>
+    <string name="surname">Surname</string>
+    <string name="email">E-Mail</string>
+    <string name="mobile_num">Mobile Number</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="receive_email">Receive E-mails</string>
+    <string name="receive_sms">Receive SMSes</string>
+
+
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="error_passwords_no_match">Passwords do not match</string>
+</resources>

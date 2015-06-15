@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainListingActivity">
+
+    <item android:id="@+id/profile"
+        android:title="@string/profile"
+        android:showAsAction="ifRoom"
+        android:icon="@drawable/profile_pics_generic"/>
+</menu>
+<!-- From: file:/home/altus/gitArchives/django/jmbo-games/Android/android/app/src/main/res/menu/menu_main_listing.xml -->

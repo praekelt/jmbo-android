@@ -1,0 +1,49 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
+
+    packagingOptions {
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
+
+    defaultConfig {
+        applicationId "praekelt.weblistingapp"
+        minSdkVersion 14
+        targetSdkVersion 21
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+//    testOptions {
+//        unitTests.returnDefaultValues = true
+//    }
+}
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    // Library for websocket usage on android
+    compile 'org.java-websocket:Java-WebSocket:1.3.0'
+    // Google Android packages
+    compile 'com.android.support:appcompat-v7:22.1.1'
+    compile 'com.google.android.gms:play-services:7.3.0'
+    // Newer version of apache's http components
+    compile group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'
+    compile('org.apache.httpcomponents:httpmime:4.3') {
+        exclude module: "httpclient"
+    }
+    // Retrofit is a library for easy sue o restful services
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
+
+    compile 'com.google.code.gson:gson:2.3.1'
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.robolectric:robolectric:3.0-rc3'
+}
