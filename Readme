@@ -17,65 +17,6 @@ README STILL UNDER CONSTRUCTION
 	Also callinCard send currently only saves recording, does not send them. Located on device Storage/Android/data/altus.visualradio/callinCards (names can still change and will not be user accessible in final version)
 	Can manually delete recordings or completely clear app cache
 
-- Content types and JSON formats:
-///////
-[VARIABLE TYPE] "key" : "value"
-NB: [VARIABLE TYPE] is not contained in the actual JSON only included for easier reference
-///////
-
-MUSIC: [JSONObject]
-{
-[JSONObject] "card": 
-	{
-	[STRING] "subtitle": "Artist Name", 
-
-	[STRING] "title": "Title of Song", 
-	[STRING] "artist": "Artist Name", 
- 
-	[INT] "publish_on": Time of publication since epoch time in milliseconds,
-	[INT] "id": "The id for this post",
-
-	[STRING] "thumbnail_url": "Thumbnail image URL", 
-	[STRING] "image_url": "Larger image URL", 
-
-	[STRING] "content_type": "music", 
-	[STRING] "operation": "Operation type: New, Update or Delete", 
-	[STRING] "type": "music", 
-	[STRING] "itunes_url": "Links to itunes store page" 
-	}, 
-[STRING] "channel": "visualradio", 
-[STRING] "msg_type": "card"
-
-}
-
-{
-[JSONObject] "card": 
-	{
-	[STRING] "subtitle": "", 
-	[STRING] "title": "Weather Update", 
-	[INT] "publish_on": Time of publication since epoch time in milliseconds, 
-	[STRING] "content_type": "weather", 
-	[STRING] "operation": "Operation type: New, Update or Delete", 
-	[JSONArray] "cities": [
-		{
-		[STRING] "name": "Name of City", 
-		[STRING] "city_code": "Identifier for city", 
-		[JSONArray] "days": [
-		{
-			[STRING] "date": "YYYY-MM-DD format", 
-			[STRING] "high": "highest temp for that day, eventhough a String value , contains integers(Technically)", 
-			[STRING] "icon": "name of icone to be displayed", 
-			[STRING] "low": "highest temp for that day, eventhough a String value, contains integers(Technically)", 
-			[STRING] "icon_url": "URL for icon"
-			}, Continues for x amount of days]}, 
-		Continues for x amount of cities]
-		}, 
-	[INT] "id": "The id for this post",
-	}, 
-"channel": "visualradio", 
-"msg_type": "card"
-}
-
 
 
 
