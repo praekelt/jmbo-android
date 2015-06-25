@@ -1,0 +1,28 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eeeeee">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_margin="16dp"
+        android:background="#eeeeee"
+        android:id="@+id/list_fragment"
+        android:layout_above="@+id/player_fragment">
+        </FrameLayout>
+
+    <fragment
+        android:id="@+id/player_fragment"
+        android:name="praekelt.weblistingapp.PlayerFragment"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="#f8f8f8"
+        tools:layout="@layout/fragment_player">
+    </fragment>
+
+</RelativeLayout>

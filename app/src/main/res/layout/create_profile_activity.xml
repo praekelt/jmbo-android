@@ -1,0 +1,165 @@
+
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/login_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffffff">
+
+        <!--Padding is added for Scroll to work properly-->
+        <RelativeLayout
+            android:id="@+id/email_login_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="0dp"
+            android:fillViewport="true">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:weightSum="1"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/jaclogo"
+                android:id="@+id/jac_splash">
+            </ImageView>
+
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/jac_splash"
+                android:layout_marginTop="20dp"
+                android:hint="@string/username"
+                android:textColor="#ff000000"
+                android:gravity="center"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColorHint="#ffc4c4c4"
+                android:textSize="15dp"
+                android:textCursorDrawable="@null"/>
+
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/username"
+                android:hint="@string/name"
+                android:textColor="#ff000000"
+                android:gravity="center"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColorHint="#ffc4c4c4"
+                android:textSize="15dp"
+                android:textCursorDrawable="@null"/>
+
+            <EditText android:id="@+id/surname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/name"
+                android:hint="@string/surname"
+                android:gravity="center"
+                android:imeOptions="actionUnspecified"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="#ff000000"
+                android:textColorHint="#ffc4c4c4"
+                android:textSize="15dp"
+                android:textCursorDrawable="@null"/>
+
+            <EditText android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/surname"
+                android:hint="@string/email"
+                android:gravity="center"
+                android:imeOptions="actionUnspecified"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="#ff000000"
+                android:textColorHint="#ffc4c4c4"
+                android:textSize="15dp"
+                android:textCursorDrawable="@null"/>
+
+            <EditText android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/email"
+                android:hint="@string/prompt_password"
+                android:gravity="center"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="#ff000000"
+                android:textColorHint="#ffc4c4c4"
+                android:textSize="15dp"
+                android:textCursorDrawable="@null"/>
+
+            <EditText android:id="@+id/confirm_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/password"
+                android:hint="@string/confirm_password"
+                android:gravity="center"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="#ff000000"
+                android:textColorHint="#ffc4c4c4"
+                android:textSize="15dp"
+                android:textCursorDrawable="@null"/>
+
+            <EditText android:id="@+id/mobile_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/confirm_password"
+                android:hint="@string/mobile_num"
+                android:gravity="center"
+                android:imeOptions="actionUnspecified"
+                android:inputType="number"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="#ff000000"
+                android:textColorHint="#ffc4c4c4"
+                android:textSize="15dp"
+                android:textCursorDrawable="@null"/>
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/receive_sms"
+                android:id="@+id/recieve_sms"
+                android:textColor="#111111"
+                android:layout_below="@id/mobile_number"
+                android:layout_centerHorizontal="true"
+                android:checked="true"/>
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/receive_email"
+                android:textColor="#111111"
+                android:id="@+id/recieve_email"
+                android:layout_below="@id/recieve_sms"
+                android:layout_centerHorizontal="true"
+                android:checked="true"/>
+
+            <Button android:id="@+id/start_listening" style="@android:style/TextAppearance.Large"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recieve_email"
+                android:layout_marginTop="16dp"
+                android:background="@null"
+                android:textSize="23dp"
+                android:text="@string/start"
+                android:textColor="#7e3398" />
+        </RelativeLayout>
+    </ScrollView>
+
+
+
+
+
