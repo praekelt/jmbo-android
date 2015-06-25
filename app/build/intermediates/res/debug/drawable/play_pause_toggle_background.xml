@@ -4,4 +4,4 @@
         android:drawable="@android:color/transparent" />
     <item android:id="@+id/toggle"
         android:drawable="@drawable/play_pause_toggle" />
-</layer-list><!-- From: file:/home/altus/gitArchives/django/jmbo-games/Android/android/app/src/main/res/drawable/play_pause_toggle_background.xml -->
+</layer-list><!-- From: file:/home/altus/gitArchives/Android/jmbo-games-android/app/src/main/res/drawable/play_pause_toggle_background.xml -->

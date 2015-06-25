@@ -6,4 +6,4 @@
     <item
         android:state_checked="true"
         android:drawable="@drawable/stop_button"/>
-</selector><!-- From: file:/home/altus/gitArchives/django/jmbo-games/Android/android/app/src/main/res/drawable/record_toggle.xml -->
+</selector><!-- From: file:/home/altus/gitArchives/Android/jmbo-games-android/app/src/main/res/drawable/record_toggle.xml -->

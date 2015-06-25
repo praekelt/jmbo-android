@@ -7,4 +7,4 @@
         android:drawable="@drawable/checkbox_background" />
 
     <item android:drawable="@drawable/checkbox_background" />
-</selector><!-- From: file:/home/altus/gitArchives/django/jmbo-games/Android/android/app/src/main/res/drawable/checkbox_toggle.xml -->
+</selector><!-- From: file:/home/altus/gitArchives/Android/jmbo-games-android/app/src/main/res/drawable/checkbox_toggle.xml -->

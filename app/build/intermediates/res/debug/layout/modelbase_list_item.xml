@@ -48,4 +48,4 @@
         android:layout_marginLeft="10dp"
         android:layout_alignBottom="@+id/type_pic"
         android:layout_toRightOf="@+id/type_pic"/>
-</RelativeLayout><!-- From: file:/home/altus/gitArchives/django/jmbo-games/Android/android/app/src/main/res/layout/modelbase_list_item.xml -->
+</RelativeLayout><!-- From: file:/home/altus/gitArchives/Android/jmbo-games-android/app/src/main/res/layout/modelbase_list_item.xml -->
