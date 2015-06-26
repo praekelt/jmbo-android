@@ -28,8 +28,8 @@ import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import praekelt.weblistingapp.Utils.SavedData;
-import praekelt.weblistingapp.Utils.fileSystemUtils;
+import praekelt.weblistingapp.utils.SavedData;
+import praekelt.weblistingapp.utils.fileSystemUtils;
 
 /**
  * Created by altus on 2015/02/13.

@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import java.lang.reflect.InvocationTargetException;
 
-import praekelt.weblistingapp.Utils.JSONUtils;
+import praekelt.weblistingapp.utils.JSONUtils;
 
 /**
  * Created by altus on 2015/06/11.

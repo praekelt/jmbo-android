@@ -20,7 +20,7 @@
 //import java.util.concurrent.ExecutorService;
 //import java.util.concurrent.Executors;
 //
-//import praekelt.weblistingapp.Utils.Constants;
+//import praekelt.weblistingapp.Utils.constants.Constants;
 //import praekelt.weblistingapp.Utils.JSONFilesIO;
 //import praekelt.weblistingapp.Utils.JSONValues;
 //import praekelt.weblistingapp.Utils.StringUtils;

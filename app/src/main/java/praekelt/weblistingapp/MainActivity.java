@@ -11,29 +11,25 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import praekelt.weblistingapp.ListView.ModelBaseDetailFragment;
-import praekelt.weblistingapp.ListView.IndexListFragment;
-import praekelt.weblistingapp.LoginArea.LoginActivity;
-import praekelt.weblistingapp.Rest.API;
-import praekelt.weblistingapp.Rest.DetailModels.ModelBase;
-import praekelt.weblistingapp.Rest.Models.Item;
-import praekelt.weblistingapp.Rest.Models.ReceivedProfileData;
-import praekelt.weblistingapp.Utils.Constants;
-import praekelt.weblistingapp.Utils.JSONUtils;
-import praekelt.weblistingapp.Utils.Registry;
-import praekelt.weblistingapp.Utils.SavedData;
+import praekelt.weblistingapp.fragments.detailViews.ModelBaseDetailFragment;
+import praekelt.weblistingapp.fragments.IndexListFragment;
+import praekelt.weblistingapp.fragments.PlayerFragment;
+import praekelt.weblistingapp.fragments.detailViews.VideoDetailFragment;
+import praekelt.weblistingapp.loginArea.LoginActivity;
+import praekelt.weblistingapp.models.extendModelBase.Video;
+import praekelt.weblistingapp.restfullApi.API;
+import praekelt.weblistingapp.restfullApi.restfullModels.ReceivedProfileData;
+import praekelt.weblistingapp.restfullApi.restfullModels.VerticalThumbnailListing;
+import praekelt.weblistingapp.utils.constants.Constants;
+import praekelt.weblistingapp.utils.SavedData;
+import praekelt.weblistingapp.models.ModelBase;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -52,9 +48,10 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
 
     private static final String FRAGMENT_TAG = "data_handler";
     private FragmentManager manager;
-    private Item inflatedData;
+    private String inflatedData;
     private Bundle position = null;
     private SavedData savedData;
+
 
     // Fragments
     private HelperFragment helper;
@@ -62,8 +59,6 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
     // Initial Fragments
     private PlayerFragment player;
     private IndexListFragment listFragment;
-
-    private ModelBaseDetailFragment modelBaseDetailFragment;
 
     ReceivedProfileData profile;
 
@@ -205,16 +200,20 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
         Object detailObj = null;
         final String responseJSON = "";
         RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(Constants.LOCAL_URL_BASE)
+                .setEndpoint(Constants.DEMO_API_BASE)
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
 
         API.JMBOApi api = restAdapter.create(API.JMBOApi.class);
+        api.getVideoListing(new Callback<VerticalThumbnailListing>() {
 
-        api.getTestPost(new Callback<JsonElement>() {
             @Override
-            public void success(JsonElement s, Response response) {
-                Log.d("STRING", String.valueOf(s));
+            public void success(VerticalThumbnailListing listing, Response response) {
+                Log.i("TITLE LIST:", listing.getTitle());
+
+                list = (listing.getItems());
+                setData(listing.getItems());
+                Log.d("List Length: ", String.valueOf(list.size()));
             }
 
             @Override
@@ -222,23 +221,6 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
 
             }
         });
-//        System.out.println(address.toString());
-//        api.getVerticalThumbnailListing(new Callback<VerticalThumbnailListing>() {
-//
-//            @Override
-//            public void success(VerticalThumbnailListing listing, Response response) {
-//                Log.i("TITLE LIST:", listing.getTitle());
-//
-//                list = (listing.getItems());
-//                setData(listing.getItems());
-//                Log.d("List Length: ", String.valueOf(list.size()));
-//            }
-//
-//            @Override
-//            public void failure(RetrofitError error) {
-//
-//            }
-//        });
         //setData(list);
         return list;
     }
@@ -252,14 +234,25 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
     private void initFragments() {
         // Fragment that drives the list View and its contents
         // Only gets added if no other view is inflated
-        listFragment = (IndexListFragment) manager.findFragmentByTag("main_index_list");
+        VideoDetailFragment video = (VideoDetailFragment) manager.findFragmentByTag("vid_frag");
+        listFragment = (IndexListFragment) manager.findFragmentByTag("fragment_index_list");
 
         if(findViewById(R.id.list_fragment) != null) {
             if(listFragment == null) {
                 listFragment = new IndexListFragment();
-                manager.beginTransaction().replace(R.id.list_fragment, listFragment, "main_index_list").commit();
+                manager.beginTransaction().replace(R.id.list_fragment, listFragment, "fragment_index_list").commit();
             }
         }
+
+        // TODO Overrides list on startup testing purpouses only, remove
+//        VideoDetailFragment vid = (VideoDetailFragment) manager.findFragmentByTag("vid_frag");
+//
+//        if(findViewById(R.id.list_fragment) != null) {
+//            if(vid == null) {
+//                vid = new VideoDetailFragment();
+//                manager.beginTransaction().replace(R.id.list_fragment, vid, "fragment_index_list").commit();
+//            }
+//        }
 
         // Fragment that contains the media player
         player = (PlayerFragment) manager.findFragmentById(R.id.player_fragment);
@@ -279,18 +272,30 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
      * the Fragment is given its data to use
      * @param item a Single ModelBase object's data for usage in inflated view
      */
-    public void inflateView(Item item, String id) {
+    public void inflateView(ModelBase item, String id) {
 
-        inflatedData = item;
+        Bundle bundle = new Bundle();
+        bundle.putString("uri", item.getResourceUri());
+
+
+        inflatedData = item.getResourceUri();
 
         Log.i("Inflating view: ", item.getClassName());
-
-        if (modelBaseDetailFragment == null) {
-            modelBaseDetailFragment = new ModelBaseDetailFragment();
-            manager.beginTransaction().replace(R.id.list_fragment, modelBaseDetailFragment, "game").commit();
-        }else {
-            manager.beginTransaction().replace(R.id.list_fragment, modelBaseDetailFragment, "game").commit();
+        switch (item.getClassName()) {
+            case "Video":
+                VideoDetailFragment videoDetailFragment = null;
+                videoDetailFragment = new VideoDetailFragment();
+                manager.beginTransaction().replace(R.id.list_fragment, videoDetailFragment, id).commit();
+                videoDetailFragment.setArguments(bundle);
+                break;
         }
+
+//        if (modelBaseDetailFragment == null) {
+//            modelBaseDetailFragment = new ModelBaseDetailFragment();
+//            manager.beginTransaction().replace(R.id.list_fragment, modelBaseDetailFragment, "game").commit();
+//        }else {
+//            manager.beginTransaction().replace(R.id.list_fragment, modelBaseDetailFragment, "game").commit();
+//        }
     }
 
     /**
@@ -321,7 +326,7 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
      * @param data
      */
 
-    public void setData(List<Item> data) {
+    public void setData(List<ModelBase> data) {
 
         // Update List
         if(data.size() == 0) {
@@ -339,10 +344,10 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
      * @param id
      */
     //@Override
-    public void initView(String id) {
+    public void View(String id) {
 //        switch(id) {
 //            case "InflatedList":
-        modelBaseDetailFragment.setDetail(inflatedData);
+        //modelBaseDetailFragment.setDetail(inflatedData);
 //                break;
 //        }
     }
@@ -356,13 +361,13 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
         getActionBar().setDisplayHomeAsUpEnabled(false);
         getActionBar().setTitle(R.string.app_name);
 
-        listFragment = (IndexListFragment) manager.findFragmentByTag("main_index_list");
+        listFragment = (IndexListFragment) manager.findFragmentByTag("fragment_index_list");
         if(findViewById(R.id.list_fragment) != null) {
             if(listFragment == null) {
                 listFragment = new IndexListFragment();
-                manager.beginTransaction().replace(R.id.list_fragment, listFragment, "main_index_list").commit();
+                manager.beginTransaction().replace(R.id.list_fragment, listFragment, "fragment_index_list").commit();
             } else {
-                manager.beginTransaction().replace(R.id.list_fragment, listFragment, "main_index_list").commit();
+                manager.beginTransaction().replace(R.id.list_fragment, listFragment, "fragment_index_list").commit();
             }
             listFragment.refocused(position, true);
         }
@@ -387,6 +392,11 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
      */
     public void postNotification(int colour, String text, String operation) {
         makeToast(text);
+    }
+
+    @Override
+    public void initView(String id) {
+
     }
 }
 

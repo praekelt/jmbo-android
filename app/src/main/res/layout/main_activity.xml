@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/player_fragment"
-        android:name="praekelt.weblistingapp.PlayerFragment"
+        android:name="praekelt.weblistingapp.fragments.PlayerFragment"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"

@@ -1,12 +1,7 @@
 package praekelt.weblistingapp;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.app.Instrumentation;
-import android.content.Intent;
-import android.support.v7.internal.view.menu.ActionMenuItem;
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.TouchUtils;
 import android.test.ViewAsserts;
 import android.test.suitebuilder.annotation.MediumTest;
 import android.view.KeyEvent;
@@ -17,9 +12,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import junit.framework.TestCase;
-
-import praekelt.weblistingapp.LoginArea.LoginActivity;
+import praekelt.weblistingapp.loginArea.LoginActivity;
 
 /**
  * Created by altus on 2015/06/08.

@@ -14,7 +14,7 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
-import praekelt.weblistingapp.LoginArea.LoginActivity;
+import praekelt.weblistingapp.loginArea.LoginActivity;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;

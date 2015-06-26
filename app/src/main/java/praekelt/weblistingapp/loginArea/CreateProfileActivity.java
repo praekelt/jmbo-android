@@ -1,4 +1,4 @@
-package praekelt.weblistingapp;
+package praekelt.weblistingapp.loginArea;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -6,67 +6,56 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import praekelt.weblistingapp.MainActivity;
+import praekelt.weblistingapp.R;
 import praekelt.weblistingapp.restfullApi.restfullModels.ReceivedProfileData;
 import praekelt.weblistingapp.restfullApi.restfullModels.SentProfileData;
 import retrofit.RestAdapter;
 
-
-public class UpdateProfileActivity extends Activity {
+/**
+ * Created by altus on 2015/04/16.
+ */
+public class CreateProfileActivity extends Activity{
 
     private EditText username;
-    private EditText password;
+    private EditText firstName;
+    private EditText lastName;
     private EditText email;
+
+    private EditText password;
+    private EditText confirmPassword;
 
     private EditText mobileNumber;
 
     private CheckBox receiveSms;
     private CheckBox receiveEmail;
 
-    ReceivedProfileData profileGlobal;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if(getIntent().getSerializableExtra("profileData") != null) {
-            profileGlobal = (ReceivedProfileData) getIntent().getSerializableExtra("profileData");
-            Log.d("Profile Username", profileGlobal.getUsername());
-        }
-
-        setContentView(R.layout.activity_update_profile);
+        setContentView(R.layout.create_profile_activity);
 
         username = (EditText) findViewById(R.id.username);
-        username.setText(this.profileGlobal.getUsername());
+        firstName = (EditText) findViewById(R.id.name);
+        lastName = (EditText) findViewById(R.id.surname);
+        email = (EditText) findViewById(R.id.email);
 
         password = (EditText) findViewById(R.id.password);
-
-        email = (EditText) findViewById(R.id.email);
-        email.setText(this.profileGlobal.getEmail());
-
+        confirmPassword = (EditText) findViewById(R.id.confirm_password);
         mobileNumber = (EditText) findViewById(R.id.mobile_number);
-        mobileNumber.setText(this.profileGlobal.getMobileNumber());
 
         receiveSms = (CheckBox) findViewById(R.id.recieve_sms);
         receiveEmail = (CheckBox) findViewById(R.id.recieve_email);
 
-        Button createProfile = (Button) findViewById(R.id.update_profile);
+        Button createProfile = (Button) findViewById(R.id.start_listening);
         createProfile.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 sendData();
-            }
-        });
-
-        Button signOut = (Button) findViewById(R.id.sign_out);
-        signOut.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                returnToMain(null);
             }
         });
     }
@@ -76,11 +65,20 @@ public class UpdateProfileActivity extends Activity {
         final String username = this.username.getText().toString();
         this.username.setError(null);
 
-        final String password = this.password.getText().toString();
-        this.password.setError(null);
+        String firstName = this.firstName.getText().toString();
+        this.firstName.setError(null);
+
+        String lastName = this.lastName.getText().toString();
+        this.lastName.setError(null);
 
         String email = this.email.getText().toString();
         this.email.setError(null);
+
+        final String password = this.password.getText().toString();
+        this.password.setError(null);
+
+        String confirmPassword = this.confirmPassword.getText().toString();
+        this.confirmPassword.setError(null);
 
         String mobileNumber = this.mobileNumber.getText().toString();
         this.mobileNumber.setError(null);
@@ -102,14 +100,34 @@ public class UpdateProfileActivity extends Activity {
             focusView = this.username;
             cancel = true;
         }
-        if (TextUtils.isEmpty(password)) {
-            this.password.setError(getString(R.string.error_field_required));
-            focusView = this.password;
+        if (TextUtils.isEmpty(firstName)) {
+            this.firstName.setError(getString(R.string.error_field_required));
+            focusView = this.firstName;
+            cancel = true;
+        }
+        if (TextUtils.isEmpty(lastName)) {
+            this.lastName.setError(getString(R.string.error_field_required));
+            focusView = this.lastName;
             cancel = true;
         }
         if (TextUtils.isEmpty(email)) {
             this.email.setError(getString(R.string.error_field_required));
             focusView = this.email;
+            cancel = true;
+        }
+        if (TextUtils.isEmpty(password)) {
+            this.password.setError(getString(R.string.error_field_required));
+            focusView = this.password;
+            cancel = true;
+        }
+        if (TextUtils.isEmpty(confirmPassword)) {
+            this.confirmPassword.setError(getString(R.string.error_field_required));
+            focusView = this.confirmPassword;
+            cancel = true;
+        }
+        if (TextUtils.isEmpty(confirmPassword)) {
+            this.confirmPassword.setError(getString(R.string.error_field_required));
+            focusView = this.confirmPassword;
             cancel = true;
         }
         if (TextUtils.isEmpty(mobileNumber)) {
@@ -118,28 +136,35 @@ public class UpdateProfileActivity extends Activity {
             cancel = true;
         }
 
+        boolean noMatch = false;
+        if (!(confirmPassword.equals(password))) {
+            alertDialogue(getString(R.string.error_passwords_no_match));
+            noMatch = true;
+        }
+
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
-            focusView.requestFocus();
-        } else {
+                focusView.requestFocus();
+        } else if(!noMatch){
             RestAdapter restAdapter = new RestAdapter.Builder()
-                    //.setEndpoint(Constants.JAC_BASE_URL)
-                    .setLogLevel(RestAdapter.LogLevel.FULL)
-                    .build();
+                        //.setEndpoint(Constants.JAC_BASE_URL)
+                        .setLogLevel(RestAdapter.LogLevel.FULL)
+                        .build();
 
             final SentProfileData profile = new SentProfileData();
             profile.setUsername(username);
-            profile.setFirstName(this.profileGlobal.getFirstName());
-            profile.setLastName(this.profileGlobal.getLastName());
+            profile.setFirstName(firstName);
+            profile.setLastName(lastName);
             profile.setEmail(email);
             profile.setMobileNumber(mobileNumber.replaceAll("\\s", ""));
+            profile.setPassword(password);
             profile.setReceiveEmail(receiveEmail);
             profile.setReceiveSms(receiveSms);
         }
     }
 
-    public void alertDialogue(String message){
+    private void alertDialogue(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(message)
                 .setCancelable(false)
@@ -151,29 +176,13 @@ public class UpdateProfileActivity extends Activity {
         alert.show();
     }
 
-    private void returnToMain(ReceivedProfileData profile) {
-        Intent intent = new Intent();
-        intent.putExtra("profileData",profile);
-        setResult(RESULT_OK, intent);
+    public void launchMain(ReceivedProfileData profile) {
+        Intent myIntent = new Intent(CreateProfileActivity.this, MainActivity.class);
+        myIntent.putExtra("profileData", profile); //Optional parameters
+        CreateProfileActivity.this.startActivity(myIntent);
         finish();
     }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_update_profile, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-
-        return super.onOptionsItemSelected(item);
-    }
 }
+
+
+
