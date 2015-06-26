@@ -1,20 +1,13 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="praekelt.weblistingapp.fragments.detailViews.VideoDetailFragment">
 
     <VideoView
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-        android:id="@+id/video_view"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/video_view"
+        android:layout_centerInParent="true"/>
 
-    <ToggleButton
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:id="@+id/videoToggle"
-
-        style="@style/toggleButton"
-        android:background="@drawable/play_pause_toggle_background"
-        android:layout_gravity="center" />
-
-</FrameLayout>
+</RelativeLayout>

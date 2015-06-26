@@ -178,9 +178,19 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
      * Currently assumes that you never moved more than one view away from liste
      */
     public void onBackPressed() {
-        //if(inflatedState) {
         Log.i("Button Press: ", "Back");
-        //}
+        if((manager.getBackStackEntryCount()) == 1) {
+            Log.i("Action: ", "popBackStack");
+            manager.popBackStackImmediate();
+        } else {
+            Log.i("Action: ", "Navigate to android home");
+            // Return to android home
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -234,35 +244,17 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
     private void initFragments() {
         // Fragment that drives the list View and its contents
         // Only gets added if no other view is inflated
-        VideoDetailFragment video = (VideoDetailFragment) manager.findFragmentByTag("vid_frag");
-        listFragment = (IndexListFragment) manager.findFragmentByTag("fragment_index_list");
+        listFragment = (IndexListFragment) manager.findFragmentByTag(Constants.INDEX_FRAGMENT);
 
         if(findViewById(R.id.list_fragment) != null) {
             if(listFragment == null) {
                 listFragment = new IndexListFragment();
-                manager.beginTransaction().replace(R.id.list_fragment, listFragment, "fragment_index_list").commit();
+                manager.beginTransaction().replace(R.id.list_fragment, listFragment, Constants.INDEX_FRAGMENT).commit();
             }
         }
-
-        // TODO Overrides list on startup testing purpouses only, remove
-//        VideoDetailFragment vid = (VideoDetailFragment) manager.findFragmentByTag("vid_frag");
-//
-//        if(findViewById(R.id.list_fragment) != null) {
-//            if(vid == null) {
-//                vid = new VideoDetailFragment();
-//                manager.beginTransaction().replace(R.id.list_fragment, vid, "fragment_index_list").commit();
-//            }
-//        }
 
         // Fragment that contains the media player
         player = (PlayerFragment) manager.findFragmentById(R.id.player_fragment);
-
-        if (findViewById(R.id.player_fragment) != null) {
-            if (player == null) {
-                player = new PlayerFragment();
-                manager.beginTransaction().replace(R.id.player_fragment, player, "fragment_player").commit();
-            }
-        }
     }
 
     /**
@@ -285,7 +277,7 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
             case "Video":
                 VideoDetailFragment videoDetailFragment = null;
                 videoDetailFragment = new VideoDetailFragment();
-                manager.beginTransaction().replace(R.id.list_fragment, videoDetailFragment, id).commit();
+                manager.beginTransaction().replace(R.id.list_fragment, videoDetailFragment, id).addToBackStack("backstack").commit();
                 videoDetailFragment.setArguments(bundle);
                 break;
         }

@@ -17,15 +17,11 @@ import praekelt.weblistingapp.utils.constants.Registry;
  */
 public class JSONUtils {
 
-    public static Object getDetailObject(JsonElement element) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public static Object getDetailObject(JsonElement element){
 
         Gson gson = new GsonBuilder().create();
 
         Object obj = gson.fromJson(element, Registry.getDetailClass(getClassType(element)));
-
-        // TODO This way does not parse parent classes
-        //Method m = obj.getClass().getDeclaredMethod("getClassName");
-        //Log.d("Object Class: ", (String) m.invoke(obj));
 
         return obj;
     }

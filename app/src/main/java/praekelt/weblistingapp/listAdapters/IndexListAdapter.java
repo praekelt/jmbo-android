@@ -14,6 +14,8 @@ import java.util.List;
 import praekelt.weblistingapp.R;
 import praekelt.weblistingapp.models.ModelBase;
 import praekelt.weblistingapp.utils.ImageLoader;
+import praekelt.weblistingapp.utils.StringUtils;
+import praekelt.weblistingapp.utils.constants.Constants;
 
 /**
  * Created by altus on 2015/01/12.
@@ -23,12 +25,15 @@ public class IndexListAdapter extends BaseAdapter{//ArrayAdapter<ModelBase> {
     private LayoutInflater inflater;
     private ArrayList<ModelBase> items;
     private ImageLoader imageLoader;
+    private String imageDir;
 
     public IndexListAdapter(Context context, ArrayList<ModelBase> contents) {
         this.items = contents;
 
         inflater = LayoutInflater.from(context);
         imageLoader = new ImageLoader(context);
+
+        imageDir = context.getExternalFilesDir(null)+"/images";
     }
 
     /**
@@ -94,7 +99,7 @@ public class IndexListAdapter extends BaseAdapter{//ArrayAdapter<ModelBase> {
 
         }
         viewHolder.imageView.setImageBitmap(null);
-        //imageLoader.displayImage(indexItem.getImageDetailUrl(), viewHolder.imageView, indexItem.getImageDetailUrl(), indexItem.imageDir);
+        imageLoader.displayImage(Constants.DEMO_API_BASE + indexItem.getImageDetailUrl().substring(1), viewHolder.imageView, StringUtils.uniqueMD5(indexItem.getImageDetailUrl()), imageDir);
         viewHolder.titleText.setText(indexItem.getTitle());
         return convertView;
     }
