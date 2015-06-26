@@ -44,7 +44,7 @@ import retrofit.client.Response;
  */
 
 public class MainActivity extends Activity implements IndexListFragment.listCallbacks,
-        HelperFragment.helperCallbacks, ModelBaseDetailFragment.fragmentCallback{
+        HelperFragment.helperCallbacks {
 
     private static final String FRAGMENT_TAG = "data_handler";
     private FragmentManager manager;
@@ -280,6 +280,12 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
                 manager.beginTransaction().replace(R.id.list_fragment, videoDetailFragment, id).addToBackStack("backstack").commit();
                 videoDetailFragment.setArguments(bundle);
                 break;
+            default:
+                ModelBaseDetailFragment modelBaseDetailFragment = null;
+                modelBaseDetailFragment = new ModelBaseDetailFragment();
+                manager.beginTransaction().replace(R.id.list_fragment, modelBaseDetailFragment, id).addToBackStack("backstack").commit();
+                modelBaseDetailFragment.setArguments(bundle);
+                break;
         }
 
 //        if (modelBaseDetailFragment == null) {
@@ -384,11 +390,6 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
      */
     public void postNotification(int colour, String text, String operation) {
         makeToast(text);
-    }
-
-    @Override
-    public void initView(String id) {
-
     }
 }
 

@@ -19,8 +19,7 @@ public class API {
         @GET("/listing/game-index/?format=json")
         void getVerticalThumbnailListing(Callback<VerticalThumbnailListing> callback);
 
-        @GET("/detail/{slug}/?format=json")
-        void getItem(@Path("slug") Callback<ModelBase> callback);
+
 
         @GET("/post/post/?format=json")
         //public JsonElement getTestPost(String item);
@@ -30,6 +29,6 @@ public class API {
         void getVideoListing(Callback<VerticalThumbnailListing> response);
 
         @GET("/{uri}?format=json")
-        void getVideoStream(@Path(value="uri", encode=false) String uri, Callback<JsonElement> response);
+        void getDetail(@Path(value="uri", encode=false) String uri, Callback<JsonElement> response);
     }
 }

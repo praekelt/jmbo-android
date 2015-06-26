@@ -21,9 +21,7 @@ public class JSONUtils {
 
         Gson gson = new GsonBuilder().create();
 
-        Object obj = gson.fromJson(element, Registry.getDetailClass(getClassType(element)));
-
-        return obj;
+        return gson.fromJson(element, Registry.getDetailClass(getClassType(element)));
     }
 
     private static String getClassType(JsonElement element) {

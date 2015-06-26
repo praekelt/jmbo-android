@@ -34,8 +34,15 @@ public class VideoDetailFragment extends Fragment {
     ProgressDialog pDialog;
     int seekValue = 0;
 
+    private String uri;
+
     public VideoDetailFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
     }
 
     @Override
@@ -49,17 +56,11 @@ public class VideoDetailFragment extends Fragment {
         }
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            String uri = bundle.getString("uri");
+            uri = bundle.getString("uri");
             Log.d("Video Uri: ", uri);
-            initDetail(uri);
         }
 
         vidControl = new MediaController(getActivity());
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
     }
 
     @Override
@@ -84,6 +85,11 @@ public class VideoDetailFragment extends Fragment {
         return v;
     }
 
+    public void onStart() {
+        super.onStart();
+        initDetail(uri);
+    }
+
     private void initDetail(String uri) {
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(Constants.DEMO_API_BASE)
@@ -91,7 +97,7 @@ public class VideoDetailFragment extends Fragment {
                 .build();
 
         API.JMBOApi api = restAdapter.create(API.JMBOApi.class);
-        api.getVideoStream(uri.substring(1), new Callback<JsonElement>() {
+        api.getDetail(uri.substring(1), new Callback<JsonElement>() {
             @Override
             public void success(JsonElement jsonElement, Response response) {
                 Log.d("Element String: ", String.valueOf(jsonElement));
