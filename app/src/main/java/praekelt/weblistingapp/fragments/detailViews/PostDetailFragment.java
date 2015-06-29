@@ -3,6 +3,7 @@ package praekelt.weblistingapp.fragments.detailViews;
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -31,15 +32,16 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class ModelBaseDetailFragment extends Fragment {
+public class PostDetailFragment extends Fragment {
     private TextView title;
     private TextView timeStamp;
+    private TextView body;
     private ImageView image;
 
     private String uri;
     private String imageDir;
 
-    public ModelBaseDetailFragment() {
+    public PostDetailFragment() {
         // Required empty public constructor
     }
 
@@ -63,10 +65,11 @@ public class ModelBaseDetailFragment extends Fragment {
         super.onStart();
 //        // TODO all actionabr things from Main Activity
 //        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-        View v = inflater.inflate(R.layout.fragment_modelbase_detail, container, false);
+        View v = inflater.inflate(R.layout.fragment_post_detail, container, false);
 
         title = (TextView) v.findViewById(R.id.title_text);
         timeStamp = (TextView) v.findViewById(R.id.text_time_stamp);
+        body = (TextView) v.findViewById(R.id.body_text);
         image = (ImageView) v.findViewById(R.id.detail_image);
 
         return v;
@@ -130,8 +133,9 @@ public class ModelBaseDetailFragment extends Fragment {
             e.printStackTrace();
         }
 
-
-
+        m = obj.getClass().getMethod("getContent");
+        Log.d("Body: ", String.valueOf(m.invoke(obj)));
+        body.setText(Html.fromHtml((String) (m.invoke(obj))));
     }
 
 //    @Override

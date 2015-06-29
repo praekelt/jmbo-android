@@ -1,6 +1,5 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#eeeeee">
@@ -12,11 +11,11 @@
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_margin="16dp"
-        android:background="#eeeeee"
-        android:layout_above="@+id/player_fragment">
+        android:background="#eeeeee">
         </FrameLayout>
 
-    <fragment
+    <!--Commented out for easy reapplication-->
+    <!--<fragment
         android:id="@+id/player_fragment"
         android:name="praekelt.weblistingapp.fragments.PlayerFragment"
 
@@ -25,6 +24,6 @@
         android:layout_alignParentBottom="true"
         android:background="#f8f8f8"
         tools:layout="@layout/fragment_player">
-    </fragment>
+    </fragment>-->
 
 </RelativeLayout>

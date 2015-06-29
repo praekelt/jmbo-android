@@ -309,7 +309,7 @@
 //                }
 //            } catch (JSONException e) {
 //                e.printStackTrace();
-//                Log.e("Error Adding contents", e.toString());
+//                Log.e("GenericError Adding contents", e.toString());
 //            }
 //
 //            setContent(contents, fileContents, operation);

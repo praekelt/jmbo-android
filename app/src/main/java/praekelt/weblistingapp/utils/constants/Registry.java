@@ -37,6 +37,10 @@ public final class Registry {
     }};
 
     public static Class getDetailClass(String key) {
-        return (Class) TYPE_CLASSES.get(key).get("detail");
+        try {
+            return (Class) TYPE_CLASSES.get(key).get("detail");
+        }catch (NullPointerException e){
+            return ModelBase.class;
+        }
     }
 }

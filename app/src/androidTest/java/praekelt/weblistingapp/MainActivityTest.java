@@ -90,42 +90,42 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 //        TouchUtils.clickView(this, playerButton);
 //    }
 
-    @MediumTest
-    public void testLoginActivity_launch() {
-
-        // TODO
-        Instrumentation.ActivityMonitor monitor = getInstrumentation().addMonitor(
-                LoginActivity.class.getName(), null, false);
-
-        // find button and click it
-        final View profileButton =  mainActivity.findViewById(R.id.profile);
-        mainActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                profileButton.requestFocus();
-                profileButton.performClick();
-            }
-        });
-
-        // TODO Launches LoginActivity because MainActivity checks for profile data before launching intent
-        // Wait 2 seconds for the start of the activity
-        LoginActivity loginActivity = (LoginActivity) monitor.waitForActivityWithTimeout(2000);
-
-        assertNotNull(loginActivity);
-
-        // Search for the textView
-        TextView textView = (TextView) loginActivity
-                .findViewById(R.id.email);
-
-        // check that the TextView is on the screen
-        ViewAsserts.assertOnScreen(loginActivity.getWindow().getDecorView(),
-                textView);
-
-        // Press back to return to original activity
-        // We have to manage the initial position within the emulator
-        this.sendKeys(KeyEvent.KEYCODE_BACK);
-
-    }
+//    @MediumTest
+//    public void testLoginActivity_launch() {
+//
+//        // TODO
+//        Instrumentation.ActivityMonitor monitor = getInstrumentation().addMonitor(
+//                LoginActivity.class.getName(), null, false);
+//
+//        // find button and click it
+//        final View profileButton =  mainActivity.findViewById(R.id.profile);
+//        mainActivity.runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                profileButton.requestFocus();
+//                profileButton.performClick();
+//            }
+//        });
+//
+//        // TODO Launches LoginActivity because MainActivity checks for profile data before launching intent
+//        // Wait 2 seconds for the start of the activity
+//        LoginActivity loginActivity = (LoginActivity) monitor.waitForActivityWithTimeout(2000);
+//
+//        assertNotNull(loginActivity);
+//
+//        // Search for the textView
+//        TextView textView = (TextView) loginActivity
+//                .findViewById(R.id.email);
+//
+//        // check that the TextView is on the screen
+//        ViewAsserts.assertOnScreen(loginActivity.getWindow().getDecorView(),
+//                textView);
+//
+//        // Press back to return to original activity
+//        // We have to manage the initial position within the emulator
+//        this.sendKeys(KeyEvent.KEYCODE_BACK);
+//
+//    }
 
     //TODO should be in UpdateProfileActivityTest
 //    @MediumTest

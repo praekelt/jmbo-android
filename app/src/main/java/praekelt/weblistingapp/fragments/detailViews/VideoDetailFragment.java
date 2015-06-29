@@ -1,16 +1,23 @@
 package praekelt.weblistingapp.fragments.detailViews;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.DialogInterface;
+import android.gesture.GestureOverlayView;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.MediaController;
+import android.widget.ToggleButton;
 import android.widget.VideoView;
 
 import com.google.gson.JsonElement;
@@ -18,6 +25,7 @@ import com.google.gson.JsonElement;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import praekelt.weblistingapp.MainActivity;
 import praekelt.weblistingapp.R;
 import praekelt.weblistingapp.restfullApi.API;
 import praekelt.weblistingapp.utils.JSONUtils;
@@ -29,9 +37,9 @@ import retrofit.client.Response;
 
 public class VideoDetailFragment extends Fragment {
 
-    VideoView video;
-    MediaController vidControl;
-    ProgressDialog pDialog;
+    private VideoView video;
+    private MediaController vidControl;
+    private ProgressDialog pDialog;
     int seekValue = 0;
 
     private String uri;
@@ -69,7 +77,6 @@ public class VideoDetailFragment extends Fragment {
 
         video = (VideoView) v.findViewById(R.id.video_view);
 
-
         video.setMediaController(vidControl);
 
         pDialog = new ProgressDialog(getActivity());
@@ -78,7 +85,15 @@ public class VideoDetailFragment extends Fragment {
         pDialog.setMessage(getString(R.string.buffering));
 
         pDialog.setIndeterminate(false);
-        pDialog.setCancelable(false);
+        pDialog.setCancelable(true);
+
+        pDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                getActivity().onBackPressed();
+            }
+        });
+
         pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         pDialog.show();
 
@@ -127,7 +142,6 @@ public class VideoDetailFragment extends Fragment {
     }
 
     private void loadStream(String path) {
-        vidControl.setAnchorView(video);
         Uri vidUri = Uri.parse(path);
         video.setMediaController(vidControl);
         video.setVideoURI(vidUri);
@@ -137,9 +151,47 @@ public class VideoDetailFragment extends Fragment {
             @Override
             public void onPrepared(MediaPlayer mp) {
                 pDialog.dismiss();
-                if(!(seekValue == 0)) {
+                if (!(seekValue == 0)) {
                     video.seekTo(seekValue);
+                } else {
+                    video.seekTo(100);
                 }
+                vidControl.setAnchorView(video);
+                video.start();
+            }
+        });
+
+        video.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                pDialog.dismiss();
+                ((MainActivity) getActivity()).alertDialogue(getString(R.string.video_error));
+                getActivity().onBackPressed();
+
+                return true;
+            }
+        });
+
+        video.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    if(video.isPlaying()) {
+                        if(vidControl.isShowing()) {
+                            video.pause();
+                        }
+                        vidControl.show();
+                        Log.d("Video: ", "Paused");
+                    } else {
+                        if(vidControl.isShowing()) {
+                            video.start();
+                        }
+                        vidControl.show();
+                        Log.d("Video: ", "Playing");
+                    }
+                }
+
+                return true;
             }
         });
     }

@@ -180,7 +180,7 @@ public class Socket extends Fragment {
 
         @Override
         public void onError(Exception ex) {
-            Log.e("Network Error", ex.toString());
+            Log.e("Network GenericError", ex.toString());
             networkIssues(EXCEPTION);
         }
     }

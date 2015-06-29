@@ -26,7 +26,6 @@ public class IndexListFragment extends ListFragment {
 
     private IndexListAdapter listAdapter;
     public listCallbacks callback;
-    private boolean unFocused = false;
     private Parcelable position = null;
 
     /**
@@ -43,7 +42,7 @@ public class IndexListFragment extends ListFragment {
     }
 
     public interface listCallbacks {
-        public void inflateView(ModelBase item, String id);
+        public void inflateDetailView(ModelBase item, String id);
         public void setPosition(Bundle bundle);
         public void updateList();
         public String getFilter();
@@ -95,13 +94,13 @@ public class IndexListFragment extends ListFragment {
      * @param id
      */
     public void onListItemClick(ListView list, View v, int listPosition, long id) {
-        //Send Data of Clicked Item
-        ModelBase item = (ModelBase) listAdapter.getItem(listPosition);
-        callback.inflateView(item, "Game");
+        // Send Data of Clicked Item
+        ModelBase item = listAdapter.getItem(listPosition);
+        callback.inflateDetailView(item, "Game");
     }
 
     /**
-     * Assigns te list Adapter
+     * Assigns the list Adapter
      */
     private void init() {
         // Inflates the main layout
@@ -120,11 +119,9 @@ public class IndexListFragment extends ListFragment {
     /**
      * Main Activity sends the list position and sets a boolean flag that allows the position to be updated
      * @param position
-     * @param unFocused
      */
-    public void refocused(Bundle position, boolean unFocused) {
+    public void refocused(Bundle position) {
         this.position =  position.getParcelable("listPosition");
-        this.unFocused = unFocused;
     }
 
     /**
@@ -132,9 +129,9 @@ public class IndexListFragment extends ListFragment {
      * @param position
      */
     public void updatePosition(Parcelable position) {
-        if(unFocused) {
+        if(position != null) {
+            Log.d("UPDATED POSITION: ", String.valueOf(position));
             getListView().onRestoreInstanceState(position);
-            unFocused = false;
         }
     }
 }

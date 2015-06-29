@@ -13,9 +13,12 @@ public class SavedData {
     public String filter;
     public String inflatedData;
 
-        public SavedData(Bundle listPosition, boolean inflatedState, String filter, String inflatedView, String prevInflatedView, String inflatedData) {
-            this.listPosition = listPosition;
-            this.filter = filter;
-            this.inflatedData = inflatedData;
-        }
+    public SavedData() {
+    }
+
+    public SavedData(Bundle listPosition, boolean inflatedState, String filter, String inflatedView, String prevInflatedView, String inflatedData) {
+        this.listPosition = listPosition;
+        this.filter = filter;
+        this.inflatedData = inflatedData;
+    }
 }

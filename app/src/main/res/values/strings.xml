@@ -1,33 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">WebListingApp</string>
+    <string name="app_name">JMBO Android</string>
     <string name="action_settings">Settings</string>
+
+    <!--View Default String values-->
     <string name="title_default_text">Title[Default]</string>
     <string name="fetch_stream_title">Fetching Stream</string>
-    <string name="buffering">Buffering please wait...</string>
+    <string name="buffering">Buffering please wait…</string>
 
-    <string name="filter_music_string">Music</string>
-
+    <!--Button text-->
     <string name="done">Done</string>
     <string name="send">Send</string>
 
     <string name="profile">Profile</string>
 
+    <!--Old List kept to keep filter from complaining on compile-->
     <string-array name="filter_spinner_list">
         <item>All</item>
-        <item>Music</item>
-        <item>News</item>
-        <item>Weather</item>
-        <item>Traffic</item>
-        <item>Bulletin</item>
     </string-array>
     <string name="title_activity_update_profile">UpdateProfileActivity</string>
 
-    <string name="hello_world">Hello world!</string>
-
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_main_activity2">MainActivity2Activity</string>
+    <!--Error strings-->
+    <string name="default_error">A error has occurred</string>
+    <string name="video_error">This video could not be played</string>
 
 </resources>

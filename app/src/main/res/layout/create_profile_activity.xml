@@ -7,7 +7,7 @@
         android:background="#ffffffff">
 
         <!--Padding is added for Scroll to work properly-->
-        <RelativeLayout
+        <RelativeLayoutic_launcher
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
                 android:layout_height="100dp"
                 android:weightSum="1"
                 android:layout_marginTop="20dp"
-                android:src="@drawable/jaclogo"
+                android:src="@drawable/dot"
                 android:id="@+id/jac_splash">
             </ImageView>
 
@@ -156,7 +156,7 @@
                 android:textSize="23dp"
                 android:text="@string/start"
                 android:textColor="#7e3398" />
-        </RelativeLayout>
+        </RelativeLayoutic_launcher>
     </ScrollView>
 
 

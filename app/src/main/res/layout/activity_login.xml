@@ -22,7 +22,7 @@
                 android:layout_height="100dp"
                 android:weightSum="1"
                 android:layout_marginTop="20dp"
-                android:src="@drawable/jaclogo"
+                android:src="@drawable/dot"
                 android:id="@+id/jac_splash">
             </ImageView>
 

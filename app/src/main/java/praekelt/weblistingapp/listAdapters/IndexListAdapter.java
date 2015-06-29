@@ -8,11 +8,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 import praekelt.weblistingapp.R;
 import praekelt.weblistingapp.models.ModelBase;
+import praekelt.weblistingapp.utils.DateUtils;
 import praekelt.weblistingapp.utils.ImageLoader;
 import praekelt.weblistingapp.utils.StringUtils;
 import praekelt.weblistingapp.utils.constants.Constants;
@@ -91,6 +93,7 @@ public class IndexListAdapter extends BaseAdapter{//ArrayAdapter<ModelBase> {
             viewHolder.titleText = (TextView) convertView.findViewById(R.id.text_title);
             viewHolder.imageView = (ImageView) convertView.findViewById(R.id.index_picture);
             viewHolder.imageView.setImageBitmap(null);
+            viewHolder.timeStamp = (TextView) convertView.findViewById(R.id.text_time_stamp);
             viewHolder.position = position;
 
             convertView.setTag(viewHolder);
@@ -98,9 +101,17 @@ public class IndexListAdapter extends BaseAdapter{//ArrayAdapter<ModelBase> {
             viewHolder = (ViewHolder) convertView.getTag();
 
         }
+        // Setting Image
         viewHolder.imageView.setImageBitmap(null);
         imageLoader.displayImage(Constants.DEMO_API_BASE + indexItem.getImageDetailUrl().substring(1), viewHolder.imageView, StringUtils.uniqueMD5(indexItem.getImageDetailUrl()), imageDir);
+
+        // Setting text
         viewHolder.titleText.setText(indexItem.getTitle());
+        try {
+            viewHolder.timeStamp.setText(DateUtils.getDate(indexItem.getPublishOn(), "yyyy-MM-dd hh:mm", "dd MMMM hh:mm"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return convertView;
     }
 

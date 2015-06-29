@@ -31,7 +31,9 @@
                 android:textStyle="bold"
 
                 android:gravity="center"
-                android:layout_marginTop="5dp"/>
+                android:paddingTop="5dp"
+
+                android:layout_alignParentTop="true"/>
 
             <TextView
                 android:id="@+id/text_time_stamp"
@@ -42,8 +44,6 @@
                 android:textColor="#8d8d8d"
                 android:textSize="10sp"
                 android:textStyle="italic"
-
-                android:layout_marginLeft="10dp"
                 android:layout_below="@id/title_text"
                 android:gravity="center_horizontal" />
 
@@ -57,6 +57,18 @@
                 android:layout_below="@id/text_time_stamp"
                 android:adjustViewBounds="true"
                 android:layout_alignBaseline="@+id/text_time_stamp" />
+
+            <TextView
+                android:id="@+id/body_text"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:textColor="#8d8d8d"
+                android:textSize="14sp"
+                android:paddingTop="10dp"
+
+                android:layout_below="@+id/detail_image"/>
 
         </RelativeLayout>
     </ScrollView>

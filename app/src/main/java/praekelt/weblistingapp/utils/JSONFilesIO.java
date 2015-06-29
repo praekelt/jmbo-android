@@ -131,10 +131,10 @@ public class JSONFilesIO {
                 jobj = new JSONObject(message);
                 arr.put(jobj);
             } catch (JSONException e1) {
-                Log.e("JSON Error", "Data is not in JSON format");
+                Log.e("JSON GenericError", "Data is not in JSON format");
                 e1.printStackTrace();
             }
-/*              Log.e("JSON Error", "Data is not in JSONArray format");
+/*              Log.e("JSON GenericError", "Data is not in JSONArray format");
                 e.printStackTrace();*/
         }
         return arr;

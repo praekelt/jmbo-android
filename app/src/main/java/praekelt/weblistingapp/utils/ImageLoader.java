@@ -30,13 +30,17 @@ public class ImageLoader {
     private Map<ImageView, String> imageViews = Collections.synchronizedMap((new WeakHashMap<ImageView, String>()));
     private ExecutorService executorService;
     private ImageCache imageCache;
-    private int default_id = R.drawable.ic_launcher;
+    private int default_id = R.drawable.dot;
     private String directory;
+
+    private Context context;
 
     public ImageLoader(Context context) {
         imageCache = new ImageCache();
         imageCache.setMemoryCache();
         executorService= Executors.newFixedThreadPool(5);
+
+        this.context = context;
     }
 
     public void displayImage(String url, ImageView view, String name, String directory) {
@@ -128,6 +132,11 @@ public class ImageLoader {
                 ImageDisplayer imageDisplayer = new ImageDisplayer(image, imageToLoad);
                 handler.post(imageDisplayer);
             } catch (IOException e) {
+
+                // Decode the Default drawable if the image url is erroneous or was unreachable
+                Bitmap image = BitmapFactory.decodeResource(context.getResources(), default_id);
+                ImageDisplayer imageDisplayer = new ImageDisplayer(image, imageToLoad);
+                handler.post(imageDisplayer);
                 e.printStackTrace();
             }
         }
@@ -147,13 +156,13 @@ public class ImageLoader {
             if(imageViewReused(imageToLoad))
                 return;
 
+            // Final catch if the link was fine but download failed or image was not found in storage
             if(bitmap!=null) {
                 imageToLoad.view.setImageBitmap(bitmap);
             }else {
                 imageToLoad.view.setImageResource(default_id);
             }
-
-            }
+        }
     }
 
     boolean imageViewReused(ImageToLoad imageToLoad) {

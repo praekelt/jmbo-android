@@ -1,7 +1,9 @@
 package praekelt.weblistingapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -11,8 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.gson.JsonElement;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -20,13 +20,11 @@ import java.util.concurrent.Executors;
 
 import praekelt.weblistingapp.fragments.detailViews.ModelBaseDetailFragment;
 import praekelt.weblistingapp.fragments.IndexListFragment;
-import praekelt.weblistingapp.fragments.PlayerFragment;
+import praekelt.weblistingapp.fragments.detailViews.PostDetailFragment;
 import praekelt.weblistingapp.fragments.detailViews.VideoDetailFragment;
-import praekelt.weblistingapp.loginArea.LoginActivity;
-import praekelt.weblistingapp.models.extendModelBase.Video;
 import praekelt.weblistingapp.restfullApi.API;
-import praekelt.weblistingapp.restfullApi.restfullModels.ReceivedProfileData;
-import praekelt.weblistingapp.restfullApi.restfullModels.VerticalThumbnailListing;
+import praekelt.weblistingapp.restfullApi.restfullModels.*;
+import praekelt.weblistingapp.restfullApi.restfullModels.GenericError;
 import praekelt.weblistingapp.utils.constants.Constants;
 import praekelt.weblistingapp.utils.SavedData;
 import praekelt.weblistingapp.models.ModelBase;
@@ -57,7 +55,6 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
     private HelperFragment helper;
 
     // Initial Fragments
-    private PlayerFragment player;
     private IndexListFragment listFragment;
 
     ReceivedProfileData profile;
@@ -86,7 +83,7 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
 
         // Checks if savedInstanceState is null, if not assumes that data was saved ot to the retained fragment
         if(savedInstanceState == null) {
-
+            savedData = new SavedData();
             Log.i("SavedBundleState", "Null");
         }else {
 
@@ -124,9 +121,9 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
      * also passes the old data of the inflated view to save bundle (empty/null if it wasn't inflated)
      * @param outState
      */
+    @Override
     public void onSaveInstanceState(Bundle outState) {
-        // TODO save last played song
-        // TODO save all this data in object as opposed to loose variables
+        savedData.listPosition = position;
         helper.setData(savedData);
         super.onSaveInstanceState(outState);
         Log.i("onSavedInstanceState", "data Passed to dataHandler");
@@ -156,18 +153,19 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
             case android.R.id.home:
                 Log.i("Menu Button: ", "Up Navigation");
                 return true;
-            case R.id.profile:
-                Log.i("Menu Button: ", "Profile");
-                if(profile == null) {
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    MainActivity.this.startActivity(intent);
-                } else {
-                    Intent intent = new Intent(MainActivity.this, UpdateProfileActivity.class);
-                    intent.putExtra("profileData", profile);
-                    MainActivity.this.startActivityForResult(intent, 1);
-                }
-
-                return true;
+            // TODO Profile menu item
+//            case R.id.profile:
+//                Log.i("Menu Button: ", "Profile");
+//                if(profile == null) {
+//                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//                    MainActivity.this.startActivity(intent);
+//                } else {
+//                    Intent intent = new Intent(MainActivity.this, UpdateProfileActivity.class);
+//                    intent.putExtra("profileData", profile);
+//                    MainActivity.this.startActivityForResult(intent, 1);
+//                }
+//
+//                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -179,7 +177,7 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
      */
     public void onBackPressed() {
         Log.i("Button Press: ", "Back");
-        if((manager.getBackStackEntryCount()) == 1) {
+        if((manager.getBackStackEntryCount()) > 0) {
             Log.i("Action: ", "popBackStack");
             manager.popBackStackImmediate();
         } else {
@@ -228,16 +226,12 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
 
             @Override
             public void failure(RetrofitError error) {
-
+                GenericError receivedError = (GenericError) error.getBodyAs(GenericError.class);
+                Log.d("GenericError: ", String.valueOf(receivedError.getError()));
             }
         });
-        //setData(list);
         return list;
     }
-
-    // TODO
-
-
     /**
      * Adds Fragments to views or checks if Fragments already exist and re uses them
      */
@@ -247,14 +241,11 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
         listFragment = (IndexListFragment) manager.findFragmentByTag(Constants.INDEX_FRAGMENT);
 
         if(findViewById(R.id.list_fragment) != null) {
-            if(listFragment == null) {
+            if (listFragment == null) {
                 listFragment = new IndexListFragment();
                 manager.beginTransaction().replace(R.id.list_fragment, listFragment, Constants.INDEX_FRAGMENT).commit();
             }
         }
-
-        // Fragment that contains the media player
-        player = (PlayerFragment) manager.findFragmentById(R.id.player_fragment);
     }
 
     /**
@@ -264,11 +255,10 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
      * the Fragment is given its data to use
      * @param item a Single ModelBase object's data for usage in inflated view
      */
-    public void inflateView(ModelBase item, String id) {
+    public void inflateDetailView(ModelBase item, String id) {
 
         Bundle bundle = new Bundle();
         bundle.putString("uri", item.getResourceUri());
-
 
         inflatedData = item.getResourceUri();
 
@@ -279,6 +269,12 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
                 videoDetailFragment = new VideoDetailFragment();
                 manager.beginTransaction().replace(R.id.list_fragment, videoDetailFragment, id).addToBackStack("backstack").commit();
                 videoDetailFragment.setArguments(bundle);
+                break;
+            case "Post":
+                PostDetailFragment postDetailFragment = null;
+                postDetailFragment = new PostDetailFragment();
+                manager.beginTransaction().replace(R.id.list_fragment, postDetailFragment, id).addToBackStack("backstack").commit();
+                postDetailFragment.setArguments(bundle);
                 break;
             default:
                 ModelBaseDetailFragment modelBaseDetailFragment = null;
@@ -302,6 +298,7 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
      */
     public void setPosition(Bundle position) {
         this.position = position;
+        Log.d("List position: ", String.valueOf(position));
     }
 
     /**
@@ -312,6 +309,11 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
     public void updateList() {
         ExecutorService executorService =  Executors.newSingleThreadExecutor();
         getList();
+
+        if (position != null) {
+            listFragment.refocused(position);
+        }
+
     }
 
     @Override
@@ -367,7 +369,7 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
             } else {
                 manager.beginTransaction().replace(R.id.list_fragment, listFragment, "fragment_index_list").commit();
             }
-            listFragment.refocused(position, true);
+
         }
     }
 
@@ -390,6 +392,23 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
      */
     public void postNotification(int colour, String text, String operation) {
         makeToast(text);
+    }
+
+    public void alertDialogue(String message) {
+        new AlertDialog.Builder(this)
+                .setTitle("Sorry")
+                .setMessage(message)
+                .setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    public void alertDialogue(String message, int cancelActions) {
+
     }
 }
 

@@ -56,26 +56,27 @@ public class FilterAdapter extends BaseAdapter implements Filterable {
 
         viewHolder.typeText.setText(type);
 
-        switch(type) {
-            case "All":
-                viewHolder.typePic.setImageResource(R.drawable.all);
-                break;
-            case "Music":
-                viewHolder.typePic.setImageResource(R.drawable.music);
-                break;
-            case "News":
-                viewHolder.typePic.setImageResource(R.drawable.news);
-                break;
-            case "Traffic":
-                viewHolder.typePic.setImageResource(R.drawable.traffic);
-                break;
-            case "Weather":
-                viewHolder.typePic.setImageResource(R.drawable.weather);
-                break;
-            case "Bulletin":
-                viewHolder.typePic.setImageResource(R.drawable.news);
-                break;
-        }
+            // TODO Filter swithc case
+//        switch(type) {
+//            case "All":
+//                viewHolder.typePic.setImageResource(R.drawable.all);
+//                break;
+//            case "Music":
+//                viewHolder.typePic.setImageResource(R.drawable.music);
+//                break;
+//            case "News":
+//                viewHolder.typePic.setImageResource(R.drawable.news);
+//                break;
+//            case "Traffic":
+//                viewHolder.typePic.setImageResource(R.drawable.traffic);
+//                break;
+//            case "Weather":
+//                viewHolder.typePic.setImageResource(R.drawable.weather);
+//                break;
+//            case "Bulletin":
+//                viewHolder.typePic.setImageResource(R.drawable.news);
+//                break;
+//        }
         return convertView;
     }
 
