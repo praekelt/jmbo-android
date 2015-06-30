@@ -63,7 +63,7 @@ public class PostDetailFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onStart();
-//        // TODO all actionabr things from Main Activity
+//        // TODO all actionbar things from Main Activity
 //        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
         View v = inflater.inflate(R.layout.fragment_post_detail, container, false);
 
@@ -116,7 +116,7 @@ public class PostDetailFragment extends Fragment {
     private void parseJson(JsonElement element) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Object obj = JSONUtils.getDetailObject(element);
 
-        Method m = obj.getClass().getMethod("getImage");
+        Method m = obj.getClass().getMethod("getImageDetailUrl");
         Log.d("Image Url: ", String.valueOf(m.invoke(obj)));
         ImageLoader imageLoader = new ImageLoader(getActivity());
         imageLoader.displayImage(Constants.DEMO_API_BASE + String.valueOf(m.invoke(obj)).substring(1), image, StringUtils.uniqueMD5(String.valueOf(m.invoke(obj))), imageDir);

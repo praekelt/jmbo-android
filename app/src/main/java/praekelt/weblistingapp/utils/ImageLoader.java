@@ -30,7 +30,7 @@ public class ImageLoader {
     private Map<ImageView, String> imageViews = Collections.synchronizedMap((new WeakHashMap<ImageView, String>()));
     private ExecutorService executorService;
     private ImageCache imageCache;
-    private int default_id = R.drawable.dot;
+    private int default_id = R.drawable.circle;
     private String directory;
 
     private Context context;
@@ -133,6 +133,7 @@ public class ImageLoader {
                 handler.post(imageDisplayer);
             } catch (IOException e) {
 
+                // TODO DEFAULT IMAGE
                 // Decode the Default drawable if the image url is erroneous or was unreachable
                 Bitmap image = BitmapFactory.decodeResource(context.getResources(), default_id);
                 ImageDisplayer imageDisplayer = new ImageDisplayer(image, imageToLoad);
@@ -160,6 +161,7 @@ public class ImageLoader {
             if(bitmap!=null) {
                 imageToLoad.view.setImageBitmap(bitmap);
             }else {
+                //TODO DEFAULT IMAGE
                 imageToLoad.view.setImageResource(default_id);
             }
         }

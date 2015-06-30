@@ -28,6 +28,7 @@ import praekelt.weblistingapp.restfullApi.restfullModels.GenericError;
 import praekelt.weblistingapp.utils.constants.Constants;
 import praekelt.weblistingapp.utils.SavedData;
 import praekelt.weblistingapp.models.ModelBase;
+import praekelt.weblistingapp.utils.fileSystemUtils;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -61,6 +62,10 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // TODO solidify this check on a better spot
+        fileSystemUtils.checkDirectory(getExternalFilesDir(null) + "/images");
+
         super.onCreate(savedInstanceState);
         if(getIntent().getSerializableExtra("profileData") != null) {
             profile = (ReceivedProfileData) getIntent().getSerializableExtra("profileData");

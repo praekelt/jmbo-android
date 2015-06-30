@@ -6,3 +6,4 @@
 /build
 /captures
 jmbo-android-keystore.jks
+/app/*.apk

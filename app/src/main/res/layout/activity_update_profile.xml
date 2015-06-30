@@ -19,7 +19,7 @@
             android:layout_height="100dp"
             android:weightSum="1"
             android:layout_marginTop="20dp"
-            android:src="@drawable/dot"
+            android:src="@drawable/praekelt_logo"
             android:id="@+id/jac_splash">
         </ImageView>
 

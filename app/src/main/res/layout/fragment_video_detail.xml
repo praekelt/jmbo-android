@@ -5,12 +5,42 @@
     android:background="#ffffff"
     tools:context="praekelt.weblistingapp.fragments.detailViews.VideoDetailFragment">
 
-    <VideoView
+    <TextView
+        android:id="@+id/title_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
+        android:textColor="#ff000000"
+        android:textSize="19sp"
+        android:textStyle="bold"
+
+        android:gravity="center"
+        android:paddingTop="5dp"
+
+        android:layout_alignParentTop="true"/>
+
+    <VideoView
         android:id="@+id/video_view"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:adjustViewBounds="true"/>
+        android:adjustViewBounds="true"
+        android:layout_below="@id/title_text"/>
+
+    <TextView
+        android:id="@+id/content_text"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:textColor="#8d8d8d"
+        android:textSize="14sp"
+        android:paddingTop="10dp"
+
+        android:layout_below="@+id/video_view"/>
 
 </RelativeLayout>

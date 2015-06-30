@@ -2,12 +2,9 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="210dp"
-    android:orientation="horizontal"
+    android:layout_height="wrap_content"
     android:baselineAligned="false"
     android:background="#ffffffff">
-
-
 
     <TextView
         android:id="@+id/text_title"
@@ -39,10 +36,11 @@
         android:id="@+id/index_picture"
 
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/text_time_stamp"
-        android:layout_marginTop="10dp"
-        android:scaleType="centerCrop"
+        android:layout_height="wrap_content"
+        android:scaleType="fitEnd"
+        android:paddingTop="10dp"
+        android:layout_below="@id/text_time_stamp"
+        android:adjustViewBounds="true"
 
         android:contentDescription="index_image">
     </ImageView>

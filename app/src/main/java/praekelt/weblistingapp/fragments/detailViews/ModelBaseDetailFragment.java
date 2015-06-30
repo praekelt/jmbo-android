@@ -113,7 +113,7 @@ public class ModelBaseDetailFragment extends Fragment {
     private void parseJson(JsonElement element) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Object obj = JSONUtils.getDetailObject(element);
 
-        Method m = obj.getClass().getMethod("getImage");
+        Method m = obj.getClass().getMethod("getImageDetailUrl");
         Log.d("Image Url: ", String.valueOf(m.invoke(obj)));
         ImageLoader imageLoader = new ImageLoader(getActivity());
         imageLoader.displayImage(Constants.DEMO_API_BASE + String.valueOf(m.invoke(obj)).substring(1), image, StringUtils.uniqueMD5(String.valueOf(m.invoke(obj))), imageDir);

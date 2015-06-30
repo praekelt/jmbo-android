@@ -12,6 +12,9 @@ public class Video extends ModelBase{
     @Expose
     private String stream;
 
+    @Expose
+    private String content;
+
     /**
      * @return
      * The stream
@@ -26,5 +29,21 @@ public class Video extends ModelBase{
      */
     public void setStream(String stream) {
         this.stream = stream;
+    }
+
+    /**
+     * @return
+     * The content
+     */
+    public String getContent() {
+        return content;
+    }
+
+    /**
+     * @param content
+     * The content
+     */
+    public void setContent(String content) {
+        this.content = content;
     }
 }
