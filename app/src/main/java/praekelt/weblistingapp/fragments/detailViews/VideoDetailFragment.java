@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.text.Html;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -181,7 +182,7 @@ public class VideoDetailFragment extends Fragment {
             Log.d("Title: ", (String) m.invoke(obj));
 
             m = obj.getClass().getMethod("getContent");
-            content.setText((String) m.invoke(obj));
+            content.setText(Html.fromHtml((String) m.invoke(obj)));
             Log.d("Content: ", (String) m.invoke(obj));
         }
     }
