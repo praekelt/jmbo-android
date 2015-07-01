@@ -18,13 +18,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-import praekelt.weblistingapp.fragments.detailViews.ModelBaseDetailFragment;
 import praekelt.weblistingapp.fragments.IndexListFragment;
-import praekelt.weblistingapp.fragments.detailViews.PostDetailFragment;
-import praekelt.weblistingapp.fragments.detailViews.VideoDetailFragment;
 import praekelt.weblistingapp.restfullApi.API;
 import praekelt.weblistingapp.restfullApi.restfullModels.*;
 import praekelt.weblistingapp.restfullApi.restfullModels.GenericError;
@@ -179,7 +174,8 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
         Log.i("Button Press: ", "Back");
         if((manager.getBackStackEntryCount()) > 0) {
             Log.i("MainActivity/Action: ", "popBackStack");
-            manager.popBackStackImmediate();
+            // Pop backstack and remove all other references in it
+            manager.popBackStackImmediate("backstack", FragmentManager.POP_BACK_STACK_INCLUSIVE);
         } else {
             Log.i("MainActivity/Action: ", "Navigate to android home");
             // Return to android home

@@ -27,7 +27,7 @@ import praekelt.weblistingapp.MainActivity;
 import praekelt.weblistingapp.R;
 import praekelt.weblistingapp.utils.DateUtils;
 
-public class VideoDetailFragment extends ModelBaseDetailFragment {
+public class VideoDetailFragment extends ModelBaseDetailFragment implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {
 
     private VideoView video;
     private MediaController vidControl;
@@ -145,34 +145,9 @@ public class VideoDetailFragment extends ModelBaseDetailFragment {
         video.setVideoURI(Uri.parse(path));
 
         video.requestFocus();
-        video.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                if (!(seekValue == 0)) {
-                    Log.d("Has seek to: ", "VideoView");
-                    video.seekTo(seekValue);
+        video.setOnPreparedListener(this);
 
-                } else {
-                    Log.d("No seek to: ", "VideoView");
-                    video.seekTo(100);
-                }
-                pDialog.dismiss();
-                video.start();
-            }
-        });
-
-        vidControl.setAnchorView(video);
-
-        video.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(MediaPlayer mp, int what, int extra) {
-                pDialog.dismiss();
-                ((MainActivity) getActivity()).alertDialogue(getString(R.string.video_error));
-                getActivity().onBackPressed();
-
-                return true;
-            }
-        });
+        video.setOnErrorListener(this);
 
         video.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -211,5 +186,29 @@ public class VideoDetailFragment extends ModelBaseDetailFragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mp) {
+        vidControl.setAnchorView(video);
+        if (!(seekValue == 0)) {
+            Log.d("Has seek to: ", "VideoView");
+            video.seekTo(seekValue);
+
+        } else {
+            Log.d("No seek to: ", "VideoView");
+            video.seekTo(100);
+        }
+        pDialog.dismiss();
+        video.start();
+    }
+
+    @Override
+    public boolean onError(MediaPlayer mp, int what, int extra) {
+        pDialog.dismiss();
+        ((MainActivity) getActivity()).alertDialogue(getString(R.string.video_error));
+        getActivity().onBackPressed();
+
+        return true;
     }
 }
