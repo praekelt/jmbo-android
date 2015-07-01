@@ -2,11 +2,11 @@ package praekelt.weblistingapp.utils.constants;
 
 import java.util.HashMap;
 
-import praekelt.weblistingapp.models.extendModelBase.Character;
+import praekelt.weblistingapp.fragments.detailViews.ModelBaseDetailFragment;
+import praekelt.weblistingapp.fragments.detailViews.PostDetailFragment;
+import praekelt.weblistingapp.fragments.detailViews.VideoDetailFragment;
 import praekelt.weblistingapp.models.ModelBase;
 import praekelt.weblistingapp.models.extendModelBase.Post;
-import praekelt.weblistingapp.models.extendModelBase.Review;
-import praekelt.weblistingapp.models.extendModelBase.Reviewer;
 import praekelt.weblistingapp.models.extendModelBase.Video;
 
 public final class Registry {
@@ -15,32 +15,37 @@ public final class Registry {
         // restrict instantiation
     }
 
-    private static final HashMap<String, HashMap> TYPE_CLASSES = new HashMap<String, HashMap>() {{
+    private static final HashMap<String, Class> TYPE_CLASSES = new HashMap<String, Class>() {{
+        put("ModelBase", ModelBase.class);
+        put("Post", Post.class);
+        put("Video", Video.class);
+    }};
+
+    private static final HashMap<String, HashMap> DETAIL_CLASS = new HashMap<String, HashMap>() {{
         put("ModelBase", new HashMap<String, Class>() {{
-            put("detail", ModelBase.class);
+            put("detail", ModelBaseDetailFragment.class);
         }});
         put("Post", new HashMap<String, Class>() {{
-            put("detail", Post.class);
-        }});
-        put("Character", new HashMap<String, Class>() {{
-            put("detail", Character.class);
-        }});
-        put("Review", new HashMap<String, Class>() {{
-            put("detail", Review.class);
-        }});
-        put("Reviewer", new HashMap<String, Class>() {{
-            put("detail", Reviewer.class);
+            put("detail", PostDetailFragment.class);
         }});
         put("Video", new HashMap<String, Class>() {{
-            put("detail", Video.class);
+            put("detail", VideoDetailFragment.class);
         }});
     }};
 
-    public static Class getDetailClass(String key) {
+    public static Class getObjectClass(String key) {
         try {
-            return (Class) TYPE_CLASSES.get(key).get("detail");
+            return TYPE_CLASSES.get(key);
         }catch (NullPointerException e){
             return ModelBase.class;
+        }
+    }
+
+    public static Class getDetailClass(String key) {
+        try {
+            return (Class) DETAIL_CLASS.get(key).get("detail");
+        }catch (NullPointerException e){
+            return ModelBaseDetailFragment.class;
         }
     }
 }

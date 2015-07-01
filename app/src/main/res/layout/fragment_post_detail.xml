@@ -59,7 +59,7 @@
                 android:layout_alignBaseline="@+id/text_time_stamp" />
 
             <TextView
-                android:id="@+id/body_text"
+                android:id="@+id/content_text"
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

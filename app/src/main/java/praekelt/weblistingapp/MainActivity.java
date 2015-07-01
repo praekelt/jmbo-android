@@ -2,6 +2,7 @@ package praekelt.weblistingapp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,7 +29,6 @@ import praekelt.weblistingapp.restfullApi.restfullModels.GenericError;
 import praekelt.weblistingapp.utils.constants.Constants;
 import praekelt.weblistingapp.utils.SavedData;
 import praekelt.weblistingapp.models.ModelBase;
-import praekelt.weblistingapp.utils.fileSystemUtils;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -47,7 +47,6 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
 
     private static final String FRAGMENT_TAG = "data_handler";
     private FragmentManager manager;
-    private String inflatedData;
     private Bundle position = null;
     private SavedData savedData;
 
@@ -64,7 +63,6 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
     protected void onCreate(Bundle savedInstanceState) {
 
         // TODO solidify this check on a better spot
-        fileSystemUtils.checkDirectory(getExternalFilesDir(null) + "/images");
 
         super.onCreate(savedInstanceState);
         if(getIntent().getSerializableExtra("profileData") != null) {
@@ -97,9 +95,6 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
             if(savedData != null) {
                 position = savedData.listPosition;
                 filter = savedData.filter;
-                if(savedData.inflatedData != null) {
-                    inflatedData = savedData.inflatedData;
-                }
             }
 
            Log.i("SavedBundleState", savedInstanceState.toString());
@@ -193,7 +188,6 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
-
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -265,36 +259,22 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
         Bundle bundle = new Bundle();
         bundle.putString("uri", item.getResourceUri());
 
-        inflatedData = item.getResourceUri();
+        Fragment detailView;
 
         Log.i("Inflating view: ", item.getClassName());
         switch (item.getClassName()) {
             case "Video":
-                VideoDetailFragment videoDetailFragment = null;
-                videoDetailFragment = new VideoDetailFragment();
-                manager.beginTransaction().replace(R.id.list_fragment, videoDetailFragment, id).addToBackStack("backstack").commit();
-                videoDetailFragment.setArguments(bundle);
+                detailView = new VideoDetailFragment();
                 break;
             case "Post":
-                PostDetailFragment postDetailFragment = null;
-                postDetailFragment = new PostDetailFragment();
-                manager.beginTransaction().replace(R.id.list_fragment, postDetailFragment, id).addToBackStack("backstack").commit();
-                postDetailFragment.setArguments(bundle);
+                detailView = new PostDetailFragment();
                 break;
             default:
-                ModelBaseDetailFragment modelBaseDetailFragment = null;
-                modelBaseDetailFragment = new ModelBaseDetailFragment();
-                manager.beginTransaction().replace(R.id.list_fragment, modelBaseDetailFragment, id).addToBackStack("backstack").commit();
-                modelBaseDetailFragment.setArguments(bundle);
+                detailView = new ModelBaseDetailFragment();
                 break;
         }
-
-//        if (modelBaseDetailFragment == null) {
-//            modelBaseDetailFragment = new ModelBaseDetailFragment();
-//            manager.beginTransaction().replace(R.id.list_fragment, modelBaseDetailFragment, "game").commit();
-//        }else {
-//            manager.beginTransaction().replace(R.id.list_fragment, modelBaseDetailFragment, "game").commit();
-//        }
+        manager.beginTransaction().replace(R.id.list_fragment, detailView, id).addToBackStack("backstack").commit();
+        detailView.setArguments(bundle);
     }
 
     /**

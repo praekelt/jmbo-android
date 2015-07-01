@@ -19,6 +19,18 @@
 
         android:layout_alignParentTop="true"/>
 
+    <TextView
+        android:id="@+id/text_time_stamp"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:textColor="#8d8d8d"
+        android:textSize="10sp"
+        android:textStyle="italic"
+        android:layout_below="@id/title_text"
+        android:gravity="center_horizontal" />
+
     <VideoView
         android:id="@+id/video_view"
 
@@ -29,7 +41,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:adjustViewBounds="true"
-        android:layout_below="@id/title_text"/>
+        android:layout_below="@id/text_time_stamp"/>
 
     <TextView
         android:id="@+id/content_text"
