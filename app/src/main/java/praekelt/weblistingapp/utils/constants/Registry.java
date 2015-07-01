@@ -12,7 +12,7 @@ import praekelt.weblistingapp.models.extendModelBase.Video;
 public final class Registry {
 
     private Registry() {
-        // restrict instantiation
+        // prevents instantiation
     }
 
     private static final HashMap<String, Class> TYPE_CLASSES = new HashMap<String, Class>() {{
@@ -21,16 +21,10 @@ public final class Registry {
         put("Video", Video.class);
     }};
 
-    private static final HashMap<String, HashMap> DETAIL_CLASS = new HashMap<String, HashMap>() {{
-        put("ModelBase", new HashMap<String, Class>() {{
-            put("detail", ModelBaseDetailFragment.class);
-        }});
-        put("Post", new HashMap<String, Class>() {{
-            put("detail", PostDetailFragment.class);
-        }});
-        put("Video", new HashMap<String, Class>() {{
-            put("detail", VideoDetailFragment.class);
-        }});
+    private static final HashMap<String, Class> DETAIL_CLASS = new HashMap<String, Class>() {{
+        put("ModelBase",  ModelBaseDetailFragment.class);
+        put("Post",  PostDetailFragment.class);
+        put("Video", VideoDetailFragment.class);
     }};
 
     public static Class getObjectClass(String key) {
@@ -43,7 +37,7 @@ public final class Registry {
 
     public static Class getDetailClass(String key) {
         try {
-            return (Class) DETAIL_CLASS.get(key).get("detail");
+            return DETAIL_CLASS.get(key);
         }catch (NullPointerException e){
             return ModelBaseDetailFragment.class;
         }

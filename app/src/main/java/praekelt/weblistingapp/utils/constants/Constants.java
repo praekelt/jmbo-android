@@ -3,7 +3,7 @@ package praekelt.weblistingapp.utils.constants;
 public final class Constants {
 
     private Constants() {
-        // restrict instantiation
+        // prevents instantiation
     }
     public static final String DEMO_API_BASE = "http://demo.jmbo.org/";
 

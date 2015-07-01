@@ -14,6 +14,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -29,6 +31,7 @@ import praekelt.weblistingapp.restfullApi.restfullModels.GenericError;
 import praekelt.weblistingapp.utils.constants.Constants;
 import praekelt.weblistingapp.utils.SavedData;
 import praekelt.weblistingapp.models.ModelBase;
+import praekelt.weblistingapp.utils.constants.Registry;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -47,7 +50,6 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
 
     private static final String FRAGMENT_TAG = "data_handler";
     private FragmentManager manager;
-    private Bundle position = null;
     private SavedData savedData;
 
 
@@ -93,7 +95,6 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
             savedData = helper.getData();
 
             if(savedData != null) {
-                position = savedData.listPosition;
                 filter = savedData.filter;
             }
 
@@ -123,7 +124,6 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
      */
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        savedData.listPosition = position;
         helper.setData(savedData);
         super.onSaveInstanceState(outState);
         Log.i("onSavedInstanceState", "data Passed to dataHandler");
@@ -178,10 +178,10 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
     public void onBackPressed() {
         Log.i("Button Press: ", "Back");
         if((manager.getBackStackEntryCount()) > 0) {
-            Log.i("Action: ", "popBackStack");
+            Log.i("MainActivity/Action: ", "popBackStack");
             manager.popBackStackImmediate();
         } else {
-            Log.i("Action: ", "Navigate to android home");
+            Log.i("MainActivity/Action: ", "Navigate to android home");
             // Return to android home
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);
@@ -203,12 +203,12 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
     private static final Object detailObj = null;
     // END ANDROID SPECIFIC METHODS
     List<ModelBase> list = new ArrayList<>();
-    private List<ModelBase> getList() {
+    public void getList() {
         Object detailObj = null;
         final String responseJSON = "";
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(Constants.DEMO_API_BASE)
-                .setLogLevel(RestAdapter.LogLevel.FULL)
+                //.setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
 
         API.JMBOApi api = restAdapter.create(API.JMBOApi.class);
@@ -216,11 +216,9 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
 
             @Override
             public void success(VerticalThumbnailListing listing, Response response) {
-                Log.i("TITLE LIST:", listing.getTitle());
-
-                list = (listing.getItems());
-                setData(listing.getItems());
-                Log.d("List Length: ", String.valueOf(list.size()));
+                Log.i("MainActivity/listTitle:", listing.getTitle());
+                listFragment.setListData(listing.getItems());
+                Log.i("MainActivity/listLength", String.valueOf(list.size()));
             }
 
             @Override
@@ -229,7 +227,6 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
                 Log.d("GenericError: ", String.valueOf(receivedError.getError()));
             }
         });
-        return list;
     }
     /**
      * Adds Fragments to views or checks if Fragments already exist and re uses them
@@ -254,51 +251,17 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
      * the Fragment is given its data to use
      * @param item a Single ModelBase object's data for usage in inflated view
      */
-    public void inflateDetailView(ModelBase item, String id) {
+    public void inflateDetailView(ModelBase item, String id) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 
         Bundle bundle = new Bundle();
         bundle.putString("uri", item.getResourceUri());
 
-        Fragment detailView;
-
+        Constructor ctor = (Registry.getDetailClass(item.getClassName())).getDeclaredConstructor();
+        Fragment detailView = (Fragment) ctor.newInstance();
         Log.i("Inflating view: ", item.getClassName());
-        switch (item.getClassName()) {
-            case "Video":
-                detailView = new VideoDetailFragment();
-                break;
-            case "Post":
-                detailView = new PostDetailFragment();
-                break;
-            default:
-                detailView = new ModelBaseDetailFragment();
-                break;
-        }
+
         manager.beginTransaction().replace(R.id.list_fragment, detailView, id).addToBackStack("backstack").commit();
         detailView.setArguments(bundle);
-    }
-
-    /**
-     * Sets the position of the listView each time the ListFragment's onPause methods is called
-     * @param position
-     */
-    public void setPosition(Bundle position) {
-        this.position = position;
-        Log.d("List position: ", String.valueOf(position));
-    }
-
-    /**
-     * Used by lit view to retrieve the most up to date data it should currently be displaying, usually on orient change and back navigation
-     * @return
-     */
-    @Override
-    public void updateList() {
-        ExecutorService executorService =  Executors.newSingleThreadExecutor();
-        getList();
-
-        if (position != null) {
-            listFragment.refocused(position);
-        }
-
     }
 
     @Override

@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,22 +19,13 @@ import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-import com.google.gson.JsonElement;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
 
 import praekelt.weblistingapp.MainActivity;
 import praekelt.weblistingapp.R;
-import praekelt.weblistingapp.restfullApi.API;
 import praekelt.weblistingapp.utils.DateUtils;
-import praekelt.weblistingapp.utils.JSONUtils;
-import praekelt.weblistingapp.utils.constants.Constants;
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class VideoDetailFragment extends ModelBaseDetailFragment {
 
@@ -60,10 +50,9 @@ public class VideoDetailFragment extends ModelBaseDetailFragment {
         super.onAttach(activity);
 
         if(activity.getResources().getConfiguration().orientation == Surface.ROTATION_180|| activity.getResources().getConfiguration().orientation == Surface.ROTATION_0) {
-            ActionBar actionBar = activity.getActionBar();
-            actionBar.hide();
             Log.d("Orient: ", "Landscape");
-            getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            activity.getActionBar().hide();
 
             landscape = true;
         }
@@ -136,10 +125,10 @@ public class VideoDetailFragment extends ModelBaseDetailFragment {
         if(!landscape) {
             m = obj.getClass().getMethod("getTitle");
             title.setText((String) m.invoke(obj));
-            Log.d("Title: ", (String) m.invoke(obj));
+            Log.i("Title: ", (String) m.invoke(obj));
 
             m = obj.getClass().getMethod("getPublishOn");
-            Log.d("publishOn: ", String.valueOf(m.invoke(obj)));
+            Log.i("publishOn: ", String.valueOf(m.invoke(obj)));
             try {
                 timeStamp.setText(DateUtils.getDate((String) (m.invoke(obj)), "yyyy-MM-dd hh:mm", "dd MMMM hh:mm"));
             } catch (ParseException e) {
@@ -148,20 +137,17 @@ public class VideoDetailFragment extends ModelBaseDetailFragment {
 
             m = obj.getClass().getMethod("getContent");
             content.setText(Html.fromHtml((String) m.invoke(obj)));
-            Log.d("Content: ", (String) m.invoke(obj));
         }
     }
 
     private void loadStream(String path) {
-        Uri vidUri = Uri.parse(path);
         video.setMediaController(vidControl);
-        video.setVideoURI(vidUri);
+        video.setVideoURI(Uri.parse(path));
 
         video.requestFocus();
         video.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
-                pDialog.dismiss();
                 if (!(seekValue == 0)) {
                     Log.d("Has seek to: ", "VideoView");
                     video.seekTo(seekValue);
@@ -170,6 +156,7 @@ public class VideoDetailFragment extends ModelBaseDetailFragment {
                     Log.d("No seek to: ", "VideoView");
                     video.seekTo(100);
                 }
+                pDialog.dismiss();
                 video.start();
             }
         });
@@ -196,13 +183,13 @@ public class VideoDetailFragment extends ModelBaseDetailFragment {
                             video.pause();
                         }
                         vidControl.show();
-                        Log.d("Video: ", "Paused");
+                        Log.i("Video: ", "Paused");
                     } else {
                         if (vidControl.isShowing()) {
                             video.start();
                         }
                         vidControl.show();
-                        Log.d("Video: ", "Playing");
+                        Log.i("Video: ", "Playing");
                     }
                 }
                 return true;
@@ -212,9 +199,8 @@ public class VideoDetailFragment extends ModelBaseDetailFragment {
 
     public void onPause() {
         super.onPause();
-        video.pause();
-
         seekValue = video.getCurrentPosition();
+        video.suspend();
     }
 
     public void onSaveInstanceState(Bundle outState) {

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,8 @@ public class IndexListFragment extends ListFragment {
     public listCallbacks callback;
     private Parcelable position = null;
 
+    private Parcelable state;
+
     /**
      * Instantiates the callback method
      * @param activity
@@ -42,16 +45,9 @@ public class IndexListFragment extends ListFragment {
     }
 
     public interface listCallbacks {
-        public void inflateDetailView(ModelBase item, String id);
-        public void setPosition(Bundle bundle);
-        public void updateList();
+        void inflateDetailView(ModelBase item, String id) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, java.lang.InstantiationException;
+        void getList();
         public String getFilter();
-    }
-
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        //Inflate the layout
-        Log.i("List View:", " Inflating");
-        return inflater.inflate(R.layout.fragment_index_list, container, false);
     }
 
     /**
@@ -61,77 +57,86 @@ public class IndexListFragment extends ListFragment {
      */
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        init();
+
+        // Assign adapter to ListView
+        listAdapter = new IndexListAdapter(getActivity().getApplicationContext(), new ArrayList<ModelBase>());
+        // Fragment needs to extend the ListFragment
+        setListAdapter(listAdapter);
+    }
+
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        //Inflate the layout
+        Log.i("List View:", " Inflating");
+        return inflater.inflate(R.layout.fragment_index_list, container, false);
+    }
+
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if(savedInstanceState != null) {
+            //Log.d("State: ", "savedState");
+            state = savedInstanceState.getParcelable("state");
+        }
+    }
+
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        callback.getList();
     }
 
     public void onStart() {
         super.onStart();
-        callback.updateList();
     }
 
     public void onResume() {
         super.onResume();
-        updatePosition(position);
     }
 
     /**
      * Saves the current list position out to the HelperFragment fragment via the Main Activity
      */
     public void onPause() {
-        Bundle bundle = new Bundle();
-        position = getListView().onSaveInstanceState();
-        bundle.putParcelable("listPosition", position);
-
-        callback.setPosition(bundle);
+        state = getListView().onSaveInstanceState();
         super.onPause();
+    }
+
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable("state", state);
+        Log.d("STATE-OUT: ", state.toString());
+        super.onSaveInstanceState(outState);
     }
 
     /**
      * Notifies the main activity which view it needs to inflate, based on the item selected from the list
      * @param list
-     * @param v
+     * @param view
      * @param listPosition
      * @param id
      */
-    public void onListItemClick(ListView list, View v, int listPosition, long id) {
+    public void onListItemClick(ListView list, View view, int listPosition, long id) {
         // Send Data of Clicked Item
         ModelBase item = listAdapter.getItem(listPosition);
-        callback.inflateDetailView(item, String.valueOf(id));
-    }
-
-    /**
-     * Assigns the list Adapter
-     */
-    private void init() {
-        // Inflates the main layout
-        Log.i("Initialising List", "True");
-        // Assign adapter to ListView
-        listAdapter = new IndexListAdapter(getActivity().getApplicationContext(), new ArrayList<ModelBase>());
-
-        // Fragment needs to extend the ListFragment
-        setListAdapter(listAdapter);
+        try {
+            callback.inflateDetailView(item, String.valueOf(id));
+        } catch (NoSuchMethodException e) {
+            Log.e("Error: ", "No such method found in class");
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (java.lang.InstantiationException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setListData(List<ModelBase> data) {
-            listAdapter.setData(data);
-    }
+        listAdapter.setData(data);
 
-    /**
-     * Main Activity sends the list position and sets a boolean flag that allows the position to be updated
-     * @param position
-     */
-    public void refocused(Bundle position) {
-        this.position =  position.getParcelable("listPosition");
-    }
-
-    /**
-     * List position is updated if the boolean flag is true
-     * @param position
-     */
-    public void updatePosition(Parcelable position) {
-        if(position != null) {
-            Log.d("UPDATED POSITION: ", String.valueOf(position));
-            getListView().onRestoreInstanceState(position);
+        if(state != null) {
+            //Log.d("State: ", "Restored");
+            Log.d("STATE: ", state.toString());
+            getListView().onRestoreInstanceState(state);
         }
     }
 }

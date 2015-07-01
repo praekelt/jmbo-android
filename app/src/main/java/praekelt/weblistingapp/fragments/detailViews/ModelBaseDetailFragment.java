@@ -86,7 +86,7 @@ public class ModelBaseDetailFragment extends Fragment {
     private void accessAPI(String uri) {
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(Constants.DEMO_API_BASE)
-                .setLogLevel(RestAdapter.LogLevel.FULL)
+                //.setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
 
         API.JMBOApi api = restAdapter.create(API.JMBOApi.class);
@@ -149,6 +149,10 @@ public class ModelBaseDetailFragment extends Fragment {
 
     public void onSaveInstanceState (Bundle outState) {
         super.onSaveInstanceState(outState);
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
     }
 
 }
