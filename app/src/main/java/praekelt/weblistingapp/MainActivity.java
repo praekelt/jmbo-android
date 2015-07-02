@@ -12,6 +12,7 @@ import android.util.Log;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import java.lang.reflect.Constructor;
@@ -353,6 +354,11 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
 
     public void alertDialogue(String message, int cancelActions) {
 
+    }
+
+    public void fullscreenMethod() {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getActionBar().hide();
     }
 }
 

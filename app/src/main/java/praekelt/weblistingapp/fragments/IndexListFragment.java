@@ -101,8 +101,11 @@ public class IndexListFragment extends ListFragment {
     }
 
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable("state", state);
-        Log.d("STATE-OUT: ", state.toString());
+        // TODO state change in Detail nullifies state
+        if (state != null) {
+            outState.putParcelable("state", state);
+            Log.d("STATE-OUT: ", state.toString());
+        }
         super.onSaveInstanceState(outState);
     }
 
