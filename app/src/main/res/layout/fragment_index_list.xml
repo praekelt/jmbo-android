@@ -1,16 +1,13 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#eeeeee"
     android:layout_margin="@dimen/universal_margin">
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:dividerHeight="@dimen/default_padding"
-        android:background="#eeeeee">
+        android:dividerHeight="@dimen/default_padding">
     </ListView>
 </RelativeLayout>

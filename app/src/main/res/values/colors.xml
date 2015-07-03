@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- BG Fill colours-->
+    <item name="bg_fill_colour" type="color">#eeeeee</item>
+    <item name="white" type="color">#ffffff</item>
+    <item name="black" type="color">#ff000000</item>
+
+    <!-- Text Colours-->
+    <item name="title_colour" type="color">#ff000000</item>
+    <item name="subtitle_colour" type="color">#8d8d8d</item>
+
+    <!--<integer-array name="androidcolors">-->
+        <!--<item>@color/bg_fill_colour</item>-->
+        <!--<item>@color/white</item>-->
+        <!--<item>@color/subtitle_colour</item>-->
+        <!--<item>@color/title_colour</item>-->
+    <!--</integer-array>-->
+</resources>

@@ -123,7 +123,7 @@ public class VideoDetailFragment extends ModelBaseDetailFragment implements Medi
             title.setText((String) m.invoke(obj));
 
             m = obj.getClass().getMethod("getContent");
-            content.setText((String) m.invoke(obj));
+            content.setText(Html.fromHtml((String) (m.invoke(obj))));
         }
     }
 
@@ -145,7 +145,24 @@ public class VideoDetailFragment extends ModelBaseDetailFragment implements Medi
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
         pDialog.dismiss();
-        ((MainActivity) getActivity()).alertDialogue(getString(R.string.video_error));
+        switch (what) {
+            case MediaPlayer.MEDIA_ERROR_TIMED_OUT:
+                ((MainActivity) getActivity()).alertDialogue(getString(R.string.video_error_TIME_OUT));
+                break;
+            case MediaPlayer.MEDIA_ERROR_UNSUPPORTED:
+                ((MainActivity) getActivity()).alertDialogue(getString(R.string.video_error_UNSUPPORTED));
+                break;
+            case MediaPlayer.MEDIA_ERROR_MALFORMED:
+                ((MainActivity) getActivity()).alertDialogue(getString(R.string.video_error_MALFORMED));
+                break;
+            case MediaPlayer.MEDIA_ERROR_SERVER_DIED:
+                ((MainActivity) getActivity()).alertDialogue(getString(R.string.video_error_SERVER_DIED));
+                break;
+            default:
+                ((MainActivity) getActivity()).alertDialogue(getString(R.string.video_error));
+                break;
+        }
+
         getActivity().onBackPressed();
 
         return true;
@@ -173,16 +190,50 @@ public class VideoDetailFragment extends ModelBaseDetailFragment implements Medi
 
     @Override
     public void onPause() {
-        super.onPause();
+        Log.d("Method Start: ", "onPause()" + System.currentTimeMillis());
         video.pause();
         seekValue = video.getCurrentPosition();
-        Log.d("SeekValue: ", String.valueOf(seekValue));
+
+        Log.d("Method Call: ", ".    suspend()" + System.currentTimeMillis());
         video.suspend();
+        Log.d("Method Call: ", ".    suspend()" + System.currentTimeMillis());
+
+        super.onPause();
+        Log.d("SeekValue: ", String.valueOf(seekValue));
+
+        Log.d("Method Stop: ", "onPause()" + System.currentTimeMillis());
     }
 
-    public void onSaveInstanceState(Bundle outsate) {
-        outsate.putInt("seekValue", seekValue);
-        super.onSaveInstanceState(outsate);
+    public void onStop() {
+        Log.d("Method Start: ", "onStop()" + System.currentTimeMillis());
+        super.onStop();
+        Log.d("Method Stop: ", "onStop()" + System.currentTimeMillis());
+    }
+
+    public void onSaveInstanceState(Bundle outState) {
+        Log.d("Method Start: ", "onSaveInstanceState()" + System.currentTimeMillis());
+        outState.putInt("seekValue", seekValue);
+        super.onSaveInstanceState(outState);
+        Log.d("Method Stop: ", "onSaveInstanceState()" + System.currentTimeMillis());
+    }
+
+    public void onDestroyView() {
+        Log.d("Method Start: ", "onDestroyView()" + System.currentTimeMillis());
+        super.onDestroyView();
+        Log.d("Method Stop: ", "onDestroyView()" + System.currentTimeMillis());
+    }
+
+    public void onDestroy() {
+        Log.d("Method Start: ", "onDestroy()" + System.currentTimeMillis());
+        super.onDestroy();
+        Log.d("Method Stop: ", "onDestroy()" + System.currentTimeMillis());
+    }
+
+    public void onDetach() {
+        Log.d("Method Start: ", "onDetach()" + System.currentTimeMillis());
+        //video.stopPlayback();
+        super.onDetach();
+        Log.d("Method Stop: ", "onDetach()" + System.currentTimeMillis());
     }
 
 }

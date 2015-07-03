@@ -27,5 +27,4 @@
         <item name="android:button">@drawable/checkbox_box_color</item>
         <item name="android:checkMark">@drawable/abc_btn_check_material</item>
     </style>
-
 </resources>

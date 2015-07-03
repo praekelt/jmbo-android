@@ -23,6 +23,12 @@
 
     <!--Error strings-->
     <string name="default_error">A error has occurred</string>
+
+    <!--MediaPlayer errors-->
     <string name="video_error">This video could not be played</string>
+    <string name="video_error_TIME_OUT">Could not reach server</string>
+    <string name="video_error_UNSUPPORTED">The video format is not supported</string>
+    <string name="video_error_MALFORMED">The requested video could not be found</string>
+    <string name="video_error_SERVER_DIED">The server is currently unreachable</string>
 
 </resources>
