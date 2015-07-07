@@ -2,6 +2,7 @@ package praekelt.weblistingapp.fragments;
 
 import android.app.Activity;
 import android.app.ListFragment;
+import android.graphics.AvoidXfermode;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
@@ -133,9 +134,20 @@ public class IndexListFragment extends ListFragment {
         }
     }
 
-    public void setListData(List<ModelBase> data) {
-        listAdapter.setData(data);
+    private List<ModelBase> data;
 
+    public void setListData(List<ModelBase> data) {
+        this.data = null;
+        this.data = data;
+        populateList();
+        setPosition();
+    }
+
+    private void populateList() {
+        listAdapter.setData(data);;
+    }
+
+    private void setPosition() {
         if(state != null) {
             //Log.d("State: ", "Restored");
             Log.d("STATE: ", state.toString());

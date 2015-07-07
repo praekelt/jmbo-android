@@ -173,18 +173,19 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
      */
     public void onBackPressed() {
         Log.i("Button Press: ", "Back");
-        if((manager.getBackStackEntryCount()) > 0) {
-            Log.i("MainActivity/Action: ", "popBackStack");
-            // Pop backstack and remove all other references in it
-            manager.popBackStackImmediate("backstack", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        } else {
-            Log.i("MainActivity/Action: ", "Navigate to android home");
-            // Return to android home
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_HOME);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        }
+//        if((manager.getBackStackEntryCount()) > 0) {
+//            Log.i("MainActivity/Action: ", "popBackStack");
+//            // Pop backstack and remove all other references in it
+//            manager.popBackStackImmediate("backstack", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//        } else {
+//            Log.i("MainActivity/Action: ", "Navigate to android home");
+//            // Return to android home
+//            Intent intent = new Intent(Intent.ACTION_MAIN);
+//            intent.addCategory(Intent.CATEGORY_HOME);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            startActivity(intent);
+//        }
+        super.onBackPressed();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

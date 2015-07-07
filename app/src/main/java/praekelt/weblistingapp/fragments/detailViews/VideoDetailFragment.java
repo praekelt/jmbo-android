@@ -20,12 +20,14 @@ import android.widget.VideoView;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import praekelt.weblistingapp.MainActivity;
 import praekelt.weblistingapp.R;
 
 // TODO VideoView network calls seem to block ui thread, fix: currently unknown
-public class VideoDetailFragment extends ModelBaseDetailFragment implements MediaPlayer.OnErrorListener, View.OnTouchListener {
+public class VideoDetailFragment extends ModelBaseDetailFragment implements MediaPlayer.OnErrorListener, View.OnTouchListener, MediaPlayer.OnPreparedListener {
     private TextView content;
     private TextView title;
     private VideoView video;
@@ -129,14 +131,10 @@ public class VideoDetailFragment extends ModelBaseDetailFragment implements Medi
 
     private void loadStream(String path) {
         video.setVideoURI(Uri.parse(path));
-
-        video.requestFocus();
         video.seekTo(seekValue);
-        video.start();
 
-        vidControl.setAnchorView(video);
+        video.setOnPreparedListener(this);
 
-        pDialog.dismiss();
         video.setOnTouchListener(this);
 
         video.setOnErrorListener(this);
@@ -190,50 +188,43 @@ public class VideoDetailFragment extends ModelBaseDetailFragment implements Medi
 
     @Override
     public void onPause() {
-        Log.d("Method Start: ", "onPause()" + System.currentTimeMillis());
         video.pause();
         seekValue = video.getCurrentPosition();
 
-        Log.d("Method Call: ", ".    suspend()" + System.currentTimeMillis());
         video.suspend();
-        Log.d("Method Call: ", ".    suspend()" + System.currentTimeMillis());
 
         super.onPause();
         Log.d("SeekValue: ", String.valueOf(seekValue));
-
-        Log.d("Method Stop: ", "onPause()" + System.currentTimeMillis());
     }
 
     public void onStop() {
-        Log.d("Method Start: ", "onStop()" + System.currentTimeMillis());
         super.onStop();
-        Log.d("Method Stop: ", "onStop()" + System.currentTimeMillis());
     }
 
     public void onSaveInstanceState(Bundle outState) {
-        Log.d("Method Start: ", "onSaveInstanceState()" + System.currentTimeMillis());
         outState.putInt("seekValue", seekValue);
         super.onSaveInstanceState(outState);
-        Log.d("Method Stop: ", "onSaveInstanceState()" + System.currentTimeMillis());
     }
 
     public void onDestroyView() {
-        Log.d("Method Start: ", "onDestroyView()" + System.currentTimeMillis());
         super.onDestroyView();
-        Log.d("Method Stop: ", "onDestroyView()" + System.currentTimeMillis());
     }
 
     public void onDestroy() {
-        Log.d("Method Start: ", "onDestroy()" + System.currentTimeMillis());
         super.onDestroy();
-        Log.d("Method Stop: ", "onDestroy()" + System.currentTimeMillis());
     }
 
     public void onDetach() {
-        Log.d("Method Start: ", "onDetach()" + System.currentTimeMillis());
         //video.stopPlayback();
         super.onDetach();
-        Log.d("Method Stop: ", "onDetach()" + System.currentTimeMillis());
     }
 
+    @Override
+    public void onPrepared(MediaPlayer mp) {
+        video.requestFocus();
+        video.start();
+
+        vidControl.setAnchorView(video);
+        pDialog.dismiss();
+    }
 }

@@ -2,6 +2,7 @@ package praekelt.weblistingapp.utils.constants;
 
 import java.util.HashMap;
 
+import praekelt.weblistingapp.fragments.detailViews.ExoVideoFragment;
 import praekelt.weblistingapp.fragments.detailViews.ModelBaseDetailFragment;
 import praekelt.weblistingapp.fragments.detailViews.PostDetailFragment;
 import praekelt.weblistingapp.fragments.detailViews.VideoDetailFragment;
@@ -24,7 +25,7 @@ public final class Registry {
     private static final HashMap<String, Class> DETAIL_CLASS = new HashMap<String, Class>() {{
         put("ModelBase",  ModelBaseDetailFragment.class);
         put("Post",  PostDetailFragment.class);
-        put("Video", VideoDetailFragment.class);
+        put("Video", ExoVideoFragment.class);
     }};
 
     public static Class getObjectClass(String key) {
