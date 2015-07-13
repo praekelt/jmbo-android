@@ -32,17 +32,38 @@
         android:layout_below="@id/title_text"
         android:gravity="center_horizontal" />
 
-    <VideoView
-        android:id="@+id/video_view"
-
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
+        android:background="@color/black"
+        android:fitsSystemWindows="true"
+        android:id="@+id/root"
+        android:layout_below="@id/title_text">
 
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:adjustViewBounds="true"
-        android:layout_below="@id/text_time_stamp"/>
+
+        <com.google.android.exoplayer.VideoSurfaceView
+            android:id="@+id/surface_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:paddingTop="10dp"/>
+
+        <View android:id="@+id/shutter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/black"/>
+
+        <ProgressBar
+            android:id="@+id/spinner"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:visibility="visible" >
+        </ProgressBar>
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/content_text"
@@ -54,6 +75,6 @@
         android:textSize="14sp"
         android:paddingTop="10dp"
 
-        android:layout_below="@+id/video_view"/>
+        android:layout_below="@+id/root"/>
 
 </RelativeLayout>

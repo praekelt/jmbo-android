@@ -357,6 +357,11 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
 
     }
 
+    public void toast(String message) {
+        Toast toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
     public void fullscreenMethod() {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getActionBar().hide();
