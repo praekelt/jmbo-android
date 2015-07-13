@@ -6,9 +6,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import praekelt.weblistingapp.models.ModelBase;
 import praekelt.weblistingapp.utils.constants.Registry;
 
@@ -21,7 +18,7 @@ public class JSONUtils {
 
         Gson gson = new GsonBuilder().create();
 
-        return gson.fromJson(element, Registry.getDetailClass(getClassType(element)));
+        return gson.fromJson(element, Registry.getObjectClass(getClassType(element)));
     }
 
     private static String getClassType(JsonElement element) {

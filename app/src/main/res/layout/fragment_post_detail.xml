@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:background="#ffffff">
+    android:layout_margin="@dimen/universal_margin">
 
     <!--PLACEHOLDER IMAGE-->
     <ScrollView
@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_margin="10dp"
-            android:background="#ffffff"
+            android:background="@color/white"
             android:id="@+id/view_layout">
 
 
@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
-                android:textColor="#ff000000"
+                android:textColor="@color/title_colour"
                 android:textSize="19sp"
                 android:textStyle="bold"
 
@@ -41,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
-                android:textColor="#8d8d8d"
+                android:textColor="@color/subtitle_colour"
                 android:textSize="10sp"
                 android:textStyle="italic"
                 android:layout_below="@id/title_text"
@@ -59,12 +59,12 @@
                 android:layout_alignBaseline="@+id/text_time_stamp" />
 
             <TextView
-                android:id="@+id/body_text"
+                android:id="@+id/content_text"
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
-                android:textColor="#8d8d8d"
+                android:textColor="@color/subtitle_colour"
                 android:textSize="14sp"
                 android:paddingTop="10dp"
 

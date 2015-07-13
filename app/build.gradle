@@ -41,6 +41,8 @@ dependencies {
 
     compile 'com.google.code.gson:gson:2.3.1'
 
+    compile 'com.google.android.exoplayer:exoplayer:r1.3.3'
+
     testCompile 'junit:junit:4.12'
     testCompile 'org.robolectric:robolectric:3.0-rc3'
 }

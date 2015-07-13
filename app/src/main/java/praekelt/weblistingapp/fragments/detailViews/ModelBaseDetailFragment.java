@@ -5,15 +5,12 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.JsonElement;
-
-import org.w3c.dom.Text;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -26,6 +23,7 @@ import praekelt.weblistingapp.utils.ImageLoader;
 import praekelt.weblistingapp.utils.JSONUtils;
 import praekelt.weblistingapp.utils.StringUtils;
 import praekelt.weblistingapp.utils.constants.Constants;
+import praekelt.weblistingapp.utils.fileSystemUtils;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -46,6 +44,7 @@ public class ModelBaseDetailFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         imageDir = activity.getExternalFilesDir(null) + "/images";
+        fileSystemUtils.checkDirectory(imageDir);
     }
 
     public void onCreate(Bundle savedInstanceState) {
@@ -60,38 +59,42 @@ public class ModelBaseDetailFragment extends Fragment {
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onStart();
-//        // TODO all actionabr things from Main Activity
-//        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-        View v = inflater.inflate(R.layout.fragment_modelbase_detail, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
+        
+        // TODO ActionBar set in MainActivity
 
-        title = (TextView) v.findViewById(R.id.title_text);
-        timeStamp = (TextView) v.findViewById(R.id.text_time_stamp);
-        image = (ImageView) v.findViewById(R.id.detail_image);
+        return inflater.inflate(R.layout.fragment_modelbase_detail, container, false);
+    }
 
-        return v;
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        title = (TextView) view.findViewById(R.id.title_text);
+        timeStamp = (TextView) view.findViewById(R.id.text_time_stamp);
+        image = (ImageView) view.findViewById(R.id.detail_image);
     }
 
 
     public void onStart() {
         super.onStart();
-        initDetail(uri);
+        accessAPI(uri);
     }
 
     /**
      * Assigns data to the views in the layout
      */
-    private void initDetail(String uri) {
+    private void accessAPI(String uri) {
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(Constants.DEMO_API_BASE)
-                .setLogLevel(RestAdapter.LogLevel.FULL)
+                //.setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
 
         API.JMBOApi api = restAdapter.create(API.JMBOApi.class);
         api.getDetail(uri.substring(1), new Callback<JsonElement>() {
             @Override
             public void success(JsonElement jsonElement, Response response) {
-                Log.d("Element String: ", String.valueOf(jsonElement));
+                // TODO remove or uncomment if issues with incoming maessage
+//                Log.d("Element String: ", String.valueOf(jsonElement));
                 try {
                     parseJson(jsonElement);
                 } catch (NoSuchMethodException e) {
@@ -110,11 +113,13 @@ public class ModelBaseDetailFragment extends Fragment {
         });
     }
 
-    private void parseJson(JsonElement element) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    private void parseJson(JsonElement element) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         Object obj = JSONUtils.getDetailObject(element);
+        setData(obj);
+    }
 
+    public void setData(Object obj) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Method m = obj.getClass().getMethod("getImageDetailUrl");
-        Log.d("Image Url: ", String.valueOf(m.invoke(obj)));
         ImageLoader imageLoader = new ImageLoader(getActivity());
         imageLoader.displayImage(Constants.DEMO_API_BASE + String.valueOf(m.invoke(obj)).substring(1), image, StringUtils.uniqueMD5(String.valueOf(m.invoke(obj))), imageDir);
 
@@ -129,10 +134,9 @@ public class ModelBaseDetailFragment extends Fragment {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-
-
     }
+
+    // TODO
 
 //    @Override
 //    public boolean onOptionsItemSelected(MenuItem item) {
@@ -144,8 +148,11 @@ public class ModelBaseDetailFragment extends Fragment {
 //    }
 
     public void onSaveInstanceState (Bundle outState) {
-        //outState.putSerializable("viewData", (Serializable) item);
         super.onSaveInstanceState(outState);
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
     }
 
 }

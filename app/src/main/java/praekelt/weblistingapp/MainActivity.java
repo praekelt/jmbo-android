@@ -2,6 +2,7 @@ package praekelt.weblistingapp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,24 +12,22 @@ import android.util.Log;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.Toast;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-import praekelt.weblistingapp.fragments.detailViews.ModelBaseDetailFragment;
 import praekelt.weblistingapp.fragments.IndexListFragment;
-import praekelt.weblistingapp.fragments.detailViews.PostDetailFragment;
-import praekelt.weblistingapp.fragments.detailViews.VideoDetailFragment;
 import praekelt.weblistingapp.restfullApi.API;
 import praekelt.weblistingapp.restfullApi.restfullModels.*;
 import praekelt.weblistingapp.restfullApi.restfullModels.GenericError;
 import praekelt.weblistingapp.utils.constants.Constants;
 import praekelt.weblistingapp.utils.SavedData;
 import praekelt.weblistingapp.models.ModelBase;
-import praekelt.weblistingapp.utils.fileSystemUtils;
+import praekelt.weblistingapp.utils.constants.Registry;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -47,8 +46,6 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
 
     private static final String FRAGMENT_TAG = "data_handler";
     private FragmentManager manager;
-    private String inflatedData;
-    private Bundle position = null;
     private SavedData savedData;
 
 
@@ -64,7 +61,6 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
     protected void onCreate(Bundle savedInstanceState) {
 
         // TODO solidify this check on a better spot
-        fileSystemUtils.checkDirectory(getExternalFilesDir(null) + "/images");
 
         super.onCreate(savedInstanceState);
         if(getIntent().getSerializableExtra("profileData") != null) {
@@ -95,11 +91,7 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
             savedData = helper.getData();
 
             if(savedData != null) {
-                position = savedData.listPosition;
                 filter = savedData.filter;
-                if(savedData.inflatedData != null) {
-                    inflatedData = savedData.inflatedData;
-                }
             }
 
            Log.i("SavedBundleState", savedInstanceState.toString());
@@ -128,7 +120,6 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
      */
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        savedData.listPosition = position;
         helper.setData(savedData);
         super.onSaveInstanceState(outState);
         Log.i("onSavedInstanceState", "data Passed to dataHandler");
@@ -182,18 +173,19 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
      */
     public void onBackPressed() {
         Log.i("Button Press: ", "Back");
-        if((manager.getBackStackEntryCount()) > 0) {
-            Log.i("Action: ", "popBackStack");
-            manager.popBackStackImmediate();
-        } else {
-            Log.i("Action: ", "Navigate to android home");
-            // Return to android home
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_HOME);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        }
-
+//        if((manager.getBackStackEntryCount()) > 0) {
+//            Log.i("MainActivity/Action: ", "popBackStack");
+//            // Pop backstack and remove all other references in it
+//            manager.popBackStackImmediate("backstack", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//        } else {
+//            Log.i("MainActivity/Action: ", "Navigate to android home");
+//            // Return to android home
+//            Intent intent = new Intent(Intent.ACTION_MAIN);
+//            intent.addCategory(Intent.CATEGORY_HOME);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            startActivity(intent);
+//        }
+        super.onBackPressed();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -209,12 +201,12 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
     private static final Object detailObj = null;
     // END ANDROID SPECIFIC METHODS
     List<ModelBase> list = new ArrayList<>();
-    private List<ModelBase> getList() {
+    public void getList() {
         Object detailObj = null;
         final String responseJSON = "";
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(Constants.DEMO_API_BASE)
-                .setLogLevel(RestAdapter.LogLevel.FULL)
+                //.setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
 
         API.JMBOApi api = restAdapter.create(API.JMBOApi.class);
@@ -222,11 +214,9 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
 
             @Override
             public void success(VerticalThumbnailListing listing, Response response) {
-                Log.i("TITLE LIST:", listing.getTitle());
-
-                list = (listing.getItems());
-                setData(listing.getItems());
-                Log.d("List Length: ", String.valueOf(list.size()));
+                Log.i("MainActivity/listTitle:", listing.getTitle());
+                listFragment.setListData(listing.getItems());
+                Log.i("MainActivity/listLength", String.valueOf(list.size()));
             }
 
             @Override
@@ -235,7 +225,6 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
                 Log.d("GenericError: ", String.valueOf(receivedError.getError()));
             }
         });
-        return list;
     }
     /**
      * Adds Fragments to views or checks if Fragments already exist and re uses them
@@ -260,65 +249,17 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
      * the Fragment is given its data to use
      * @param item a Single ModelBase object's data for usage in inflated view
      */
-    public void inflateDetailView(ModelBase item, String id) {
+    public void inflateDetailView(ModelBase item, String id) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 
         Bundle bundle = new Bundle();
         bundle.putString("uri", item.getResourceUri());
 
-        inflatedData = item.getResourceUri();
-
+        Constructor ctor = (Registry.getDetailClass(item.getClassName())).getDeclaredConstructor();
+        Fragment detailView = (Fragment) ctor.newInstance();
         Log.i("Inflating view: ", item.getClassName());
-        switch (item.getClassName()) {
-            case "Video":
-                VideoDetailFragment videoDetailFragment = null;
-                videoDetailFragment = new VideoDetailFragment();
-                manager.beginTransaction().replace(R.id.list_fragment, videoDetailFragment, id).addToBackStack("backstack").commit();
-                videoDetailFragment.setArguments(bundle);
-                break;
-            case "Post":
-                PostDetailFragment postDetailFragment = null;
-                postDetailFragment = new PostDetailFragment();
-                manager.beginTransaction().replace(R.id.list_fragment, postDetailFragment, id).addToBackStack("backstack").commit();
-                postDetailFragment.setArguments(bundle);
-                break;
-            default:
-                ModelBaseDetailFragment modelBaseDetailFragment = null;
-                modelBaseDetailFragment = new ModelBaseDetailFragment();
-                manager.beginTransaction().replace(R.id.list_fragment, modelBaseDetailFragment, id).addToBackStack("backstack").commit();
-                modelBaseDetailFragment.setArguments(bundle);
-                break;
-        }
 
-//        if (modelBaseDetailFragment == null) {
-//            modelBaseDetailFragment = new ModelBaseDetailFragment();
-//            manager.beginTransaction().replace(R.id.list_fragment, modelBaseDetailFragment, "game").commit();
-//        }else {
-//            manager.beginTransaction().replace(R.id.list_fragment, modelBaseDetailFragment, "game").commit();
-//        }
-    }
-
-    /**
-     * Sets the position of the listView each time the ListFragment's onPause methods is called
-     * @param position
-     */
-    public void setPosition(Bundle position) {
-        this.position = position;
-        Log.d("List position: ", String.valueOf(position));
-    }
-
-    /**
-     * Used by lit view to retrieve the most up to date data it should currently be displaying, usually on orient change and back navigation
-     * @return
-     */
-    @Override
-    public void updateList() {
-        ExecutorService executorService =  Executors.newSingleThreadExecutor();
-        getList();
-
-        if (position != null) {
-            listFragment.refocused(position);
-        }
-
+        manager.beginTransaction().replace(R.id.list_fragment, detailView, id).addToBackStack("backstack").commit();
+        detailView.setArguments(bundle);
     }
 
     @Override
@@ -414,6 +355,16 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
 
     public void alertDialogue(String message, int cancelActions) {
 
+    }
+
+    public void toast(String message) {
+        Toast toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    public void fullscreenMethod() {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getActionBar().hide();
     }
 }
 
