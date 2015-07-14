@@ -21,11 +21,3 @@ Guide:
 
    quick-start
    guide/initial_setup
-
-
-Indices and tables
-==================
-
-* :ref:`modindex`
-* :ref:`search`
-
