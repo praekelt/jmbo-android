@@ -1,7 +1,7 @@
 Initial Setup
 =============
 
-Android Studio:
+Android Studio
 ---------------
 
 This is under the assumption Android Studio, Android SDK and Java are all set up and working.
