@@ -103,7 +103,7 @@ public class IndexListAdapter extends BaseAdapter{//ArrayAdapter<ModelBase> {
         }
         // Setting Image
         viewHolder.imageView.setImageBitmap(null);
-        imageLoader.displayImage(Constants.DEMO_API_BASE + indexItem.getImageDetailUrl().substring(1), viewHolder.imageView, StringUtils.uniqueMD5(indexItem.getImageDetailUrl()), imageDir);
+        imageLoader.displayImage(Constants.BASE_URL + indexItem.getImageDetailUrl().substring(1), viewHolder.imageView, StringUtils.uniqueMD5(indexItem.getImageDetailUrl()), imageDir);
 
         // Setting text
         viewHolder.titleText.setText(indexItem.getTitle());

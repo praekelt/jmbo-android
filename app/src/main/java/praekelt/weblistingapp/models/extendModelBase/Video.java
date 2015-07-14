@@ -7,7 +7,7 @@ import praekelt.weblistingapp.models.ModelBase;
 /**
  * Created by altus on 2015/06/25.
  */
-public class Video extends ModelBase{
+public class Video extends ModelBase {
 
     @Expose
     private String stream;

@@ -205,12 +205,12 @@ public class MainActivity extends Activity implements IndexListFragment.listCall
         Object detailObj = null;
         final String responseJSON = "";
         RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(Constants.DEMO_API_BASE)
+                .setEndpoint(Constants.BASE_URL)
                 //.setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
 
         API.JMBOApi api = restAdapter.create(API.JMBOApi.class);
-        api.getVideoListing(new Callback<VerticalThumbnailListing>() {
+        api.getListing(new Callback<VerticalThumbnailListing>() {
 
             @Override
             public void success(VerticalThumbnailListing listing, Response response) {

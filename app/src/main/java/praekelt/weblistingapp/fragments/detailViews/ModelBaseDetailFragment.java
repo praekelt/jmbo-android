@@ -85,7 +85,7 @@ public class ModelBaseDetailFragment extends Fragment {
      */
     private void accessAPI(String uri) {
         RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(Constants.DEMO_API_BASE)
+                .setEndpoint(Constants.BASE_URL)
                 //.setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
 
@@ -121,7 +121,7 @@ public class ModelBaseDetailFragment extends Fragment {
     public void setData(Object obj) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Method m = obj.getClass().getMethod("getImageDetailUrl");
         ImageLoader imageLoader = new ImageLoader(getActivity());
-        imageLoader.displayImage(Constants.DEMO_API_BASE + String.valueOf(m.invoke(obj)).substring(1), image, StringUtils.uniqueMD5(String.valueOf(m.invoke(obj))), imageDir);
+        imageLoader.displayImage(Constants.BASE_URL + String.valueOf(m.invoke(obj)).substring(1), image, StringUtils.uniqueMD5(String.valueOf(m.invoke(obj))), imageDir);
 
         m = obj.getClass().getMethod("getTitle");
         Log.d("Title: ", String.valueOf(m.invoke(obj)));

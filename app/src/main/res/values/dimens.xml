@@ -5,4 +5,10 @@
 
     <dimen name="universal_margin">16dp</dimen>
     <dimen name="default_padding">15dp</dimen>
+    <dimen name="top_padding">10dp</dimen>
+    <dimen name="list_divider_height">15dp</dimen>
+    <dimen name="text_margin_padding">5dp</dimen>
+
+    <dimen name="title_text_size">19sp</dimen>
+    <dimen name="subtitle_text_size">10sp</dimen>
 </resources>
