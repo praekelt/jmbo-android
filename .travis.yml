@@ -2,8 +2,8 @@ language: android
 script: ./gradlew clean test
 android:
     components:
-        - build-tools-21.1.2
-        - android-21
+        - build-tools-24.0.0
+        - android-22
 
         - extra-android-m2repository
         - extra-android-support

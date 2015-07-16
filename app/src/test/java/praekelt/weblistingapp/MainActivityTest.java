@@ -33,7 +33,7 @@ public class MainActivityTest {
 
     @Before
     public void setup() throws Exception {
-        
+
         mainActivity = Robolectric.buildActivity(MainActivity.class).create().visible().get();
 
         frameLayout = (FrameLayout) mainActivity.findViewById(R.id.list_fragment);
