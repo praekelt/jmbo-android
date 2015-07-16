@@ -2,8 +2,6 @@ package praekelt.weblistingapp.utils.constants;
 
 import java.util.HashMap;
 
-import praekelt.weblistingapp.models.extendModelBase.Character;
-
 public final class RegistryExtended {
 
     private RegistryExtended() {
